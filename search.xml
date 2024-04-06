@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>unveilr反编译微信小程序</title>
+      <link href="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+      <url>/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171211880.png" class="" title="image-20240406171211880"> <p>针对与微信小程序，网上的工具比较多，但个人感觉比较好用的是 unveilr.exe。下面针对这个工具主要介绍一下使用方法。</p><h2 id="定位小程序中加载的-wxapkg文件"><a href="#定位小程序中加载的-wxapkg文件" class="headerlink" title="定位小程序中加载的.wxapkg文件"></a>定位小程序中加载的.wxapkg文件</h2><p>1、微信设置中找到文件夹所在位置。</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171256574.png" class="" title="image-20240406171256574"> <p>2、定位过去，找到APPlet文件夹，该文件夹下面存放的是小程序加载后的缓存文件。</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171312424.png" class="" title="image-20240406171312424"> <img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171324261.png" class="" title="image-20240406171324261"> <p>3、由于可能之前加载过其他的小程序，在定位目标程序之前，可以将APPlet文件夹下内容清空</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171416730.png" class="" title="image-20240406171416730"> <p>4、加载目标程序，这块以【xxx就业】小程序为例</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171438327.png" class="" title="image-20240406171438327"> <p>5、获取到加载的小程序.wxakg文件</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171457738.png" class="" title="image-20240406171457738"> <h2 id="unveilr反编译-wxakg文件"><a href="#unveilr反编译-wxakg文件" class="headerlink" title="unveilr反编译.wxakg文件"></a>unveilr反编译.wxakg文件</h2><p>1、使用如下命令，对目标小程序进行反编译</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">unveilr.exe &quot;xxxx\Applet\wxff689bf2602ab223\12&quot;   //这块直接写文件夹名称就行，会自动读取加载的</span><br></pre></td></tr></table></figure><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171541957.png" class="" title="image-20240406171541957"> <h2 id="微信开发者助手加载进行调试"><a href="#微信开发者助手加载进行调试" class="headerlink" title="微信开发者助手加载进行调试"></a>微信开发者助手加载进行调试</h2><p>1、成功加载了小程序，但是有个报错：”不在以下 request 合法域名列表中”</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171622168.png" class="" title="image-20240406171622168"> <p>解决办法：详情-&gt;本地设置，勾选上不校验合法域名：</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171644451.png" class="" title="image-20240406171644451"> <p>重新加载小程序，发现没有报错了！</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171712573.png" class="" title="image-20240406171712573"> <p>2、点击【职位】模块，报错 “ Cannot read property ‘length’ of undefined”</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171727969.png" class="" title="image-20240406171727969"> <p>解决办法：参考如下链接</p><p><a href="https://developers.weixin.qq.com/community/develop/doc/000e2e36b6c8106a882a514495d000">https://developers.weixin.qq.com/community/develop/doc/000e2e36b6c8106a882a514495d000</a></p><p>使用 res.data.result 前 ，先使用 if(res.data&amp;&amp;res.data.result) 进行空值判断，为真后继续你的逻辑处理。</p><p><a href="https://blog.csdn.net/lily__an/article/details/89226181">https://blog.csdn.net/lily__an/article/details/89226181</a></p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171746069.png" class="" title="image-20240406171746069"> <p>按照这种解决办法，可以修改JS中的代码如下：</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171800992.png" class="" title="image-20240406171800992"> <p>重新加载，就会发现不再报错了！</p><img src="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/image-20240406171821652.png" class="" title="image-20240406171821652"> <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>排错思路，就是哪里有问题解决哪里的问题。</p><p>这种一般网上找解决办法都是有的，百度就ok！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透测试 </tag>
+            
+            <tag> 小程序 </tag>
+            
+            <tag> unveilr </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>hexo开始写博客</title>
       <link href="/2024/03/26/hexo%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/"/>
       <url>/2024/03/26/hexo%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/</url>
