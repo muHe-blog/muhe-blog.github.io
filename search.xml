@@ -4,6 +4,68 @@
   
     
     <entry>
+      <title>记一次国密站点抓包流程</title>
+      <link href="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/"/>
+      <url>/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/</url>
+      
+        <content type="html"><![CDATA[<h2 id="0x00-背景"><a href="#0x00-背景" class="headerlink" title="0x00 背景"></a>0x00 背景</h2><p>目标站点：针对国密站点，此处举例某金融国密站点</p><p>使用工具：GMproxy、burp</p><p>说明：使用GMproxy和burp联动，抓取国密站点的数据包</p><h2 id="0x01-GMproxy说明与使用"><a href="#0x01-GMproxy说明与使用" class="headerlink" title="0x01 GMproxy说明与使用"></a>0x01 GMproxy说明与使用</h2><h3 id="1-说明"><a href="#1-说明" class="headerlink" title="1. 说明"></a>1. 说明</h3><p>为保障重要系统的安全，国家密码管理局要求相应业务系统要做广泛的改造，改用中国标准的公钥密码算法。国密算法的支持已成为业务系统的重要安全保障。</p><p>但随着国密网站的增多，包括很多单位的办公SSL VPN也逐步改造为国密SSL VPN。很多常用浏览器不支持国密SSL网站访问的问题日益突出，如Chrome 、Edge、IE、FireFox火狐 等浏览器均不能访问国密SSL网站。</p><p>“GMProxy”正是来<strong>让任意浏览器支持国密网站的工具</strong>。GMProxy 为绿色软件，下载后解压即可使用。</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791136746-ff3e7b32-d306-473e-ae29-50ebcd3bfd2d.png" alt="img"> </p><h3 id="2-软件下载"><a href="#2-软件下载" class="headerlink" title="2. 软件下载"></a>2. 软件下载</h3><p>最新版的GMProxy：<a href="https://www.gmproxy.cn/GMProxy.msi">https://www.gmproxy.cn/GMProxy.msi</a></p><p>软件签名信息为: <strong>北京水熊虫网络科技有限公司</strong>。</p><p>GMProxy.msi SHA1:0b163a967b96a212a16b74083faf78963b35f375</p><h3 id="3-安装证书"><a href="#3-安装证书" class="headerlink" title="3. 安装证书"></a>3. 安装证书</h3><p>帮助–&gt;安装跟证书，安装到 “受信任的根证书安装机构”下：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791268768-95a26e92-3de4-43a5-9e16-ad2706c20b18.png" alt="img"> </p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791282379-96572723-acf2-49de-9663-c6ebd8b41c96.png" alt="img"> </p><h3 id="4-运行"><a href="#4-运行" class="headerlink" title="4. 运行"></a>4. 运行</h3><p>直接下载后之后，桌面运行快捷方式即可打开：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791353792-3bddc492-f345-415b-8b99-701619f89536.png" alt="img"> </p><h3 id="5-编辑网址列表"><a href="#5-编辑网址列表" class="headerlink" title="5. 编辑网址列表"></a>5. 编辑网址列表</h3><p>只有在国密网址列表中的URL 才会启动国密SSL 转换，无论访问HTTP 还是HTTPS ，GMProxy 都会转换成国密https进行访问。</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145035487.png" class="" title="image-20240407145035487"> <h3 id="6-备注"><a href="#6-备注" class="headerlink" title="6. 备注"></a>6. 备注</h3><p>这个工具使用有时间限制，会涉及到软件激活：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791537439-c7057d3a-980e-473b-ba7d-734998676fcc.png" alt="img"> </p><h2 id="0x02-普通浏览器访问国密站点"><a href="#0x02-普通浏览器访问国密站点" class="headerlink" title="0x02 普通浏览器访问国密站点"></a>0x02 普通浏览器访问国密站点</h2><p>“GMProxy”正是来<strong>让任意浏览器支持国密网站的工具</strong>。</p><p>1、当我们不使用GMProxy的时候，使用chrome浏览器，会提示如下：</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145149771.png" class="" title="image-20240407145149771"> <p>2、使用GMProxy来访问国密站点</p><p>（1）首先，在浏览器上设置代理，将流量转发到GMProxy（GMProxy默认端口<strong>18080</strong>）</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791712239-55d4a636-57de-48b0-aed0-6ee97011d573.png" alt="img"> </p><p>（2）开启代理，重新访问国密站点，访问成功 </p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145248016.png" class="" title="image-20240407145248016"> <img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145351471.png" class="" title="image-20240407145351471"> <h2 id="0x03-burp联动GMProxy"><a href="#0x03-burp联动GMProxy" class="headerlink" title="0x03 burp联动GMProxy"></a>0x03 burp联动GMProxy</h2><p>1、可以通过给BurpSuite 设置<strong>Upstream</strong> 代理 ，实现对国密HTTPS的测试</p><p>（这块将 burp抓到的流量转发到GMProxy）</p><p>User OPtions –&gt; UpStream proxy</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791872735-5d871ae4-6986-4a81-b4be-2fe3656c4cbd.png" alt="img"></p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791895267-edd33709-afc4-4838-91d7-d0bae3435605.png" alt="img"></p><p>2、浏览器正常开启burp代理</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685791967259-3b01339a-6792-4c12-9f01-04217b35a201.png" alt="img"></p><p>3、成功抓取到国密站点流量，并可以正常访问</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145442138.png" class="" title="image-20240407145442138"> <img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/image-20240407145537732.png" class="" title="image-20240407145537732"> ]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透测试 </tag>
+            
+            <tag> 抓包 </tag>
+            
+            <tag> burp </tag>
+            
+            <tag> 国密站点 </tag>
+            
+            <tag> GMproxy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记一次web站点检测burp证书抓包</title>
+      <link href="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/"/>
+      <url>/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/</url>
+      
+        <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h2 id="0x00-背景"><a href="#0x00-背景" class="headerlink" title="0x00 背景"></a>0x00 背景</h2><p>目标站点：某期货公司web站点</p><p>工具：charles、burp</p><p>说明：web站点开启burp后不能访问，但使用Charle抓包正常。</p><h2 id="0x01-分析"><a href="#0x01-分析" class="headerlink" title="0x01 分析"></a>0x01 分析</h2><p>1、访问目标地址：可以正常访问</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/image-20240407100812024.png" class="" title="image-20240407100812024"> <p>2、开启burp抓包，发现不能成功访问了</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/image-20240407100850127.png" class="" title="image-20240407100850127"> <p>3、但是使用charles进行抓包，可以成功抓包并访问</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/image-20240407100939799.png" class="" title="image-20240407100939799"> <p>4、所以，猜测当前站点<strong>有对burp证书进行检测</strong>。</p><h2 id="0x02-解决办法"><a href="#0x02-解决办法" class="headerlink" title="0x02 解决办法"></a>0x02 解决办法</h2><p>双层代理屏蔽掉burp证书，让流量从 <strong>浏览器 –&gt; burp –&gt;Charles</strong>：</p><p>1、首先，在burp上配置上游代理，让burp的流量转发到Charles：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685594650346-5839aa03-99af-4aa1-afe6-9498938f26a5.png" alt="img"></p><p>2、浏览器上正常开启burp代理</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685594688931-6b2f3617-5c35-469f-97bf-a1101a6321ff.png" alt="img"></p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685594700034-7b29b235-5c5b-426f-8d70-2b0d6470301f.png" alt="img"></p><p>3、打开Charles，Charles默认监听8888端口：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685594749250-eb5c2745-9f37-48e2-88fc-57495582528c.png" alt="img"></p><p>4、重新访问地址，可以成功访问并抓包：</p><img src="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1web%E7%AB%99%E7%82%B9%E6%A3%80%E6%B5%8Bburp%E8%AF%81%E4%B9%A6%E6%8A%93%E5%8C%85/image-20240407101105406.png" class="" title="image-20240407101105406"> ]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透测试 </tag>
+            
+            <tag> 抓包 </tag>
+            
+            <tag> burp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>记一次VPN不走全局代理抓包解决办法</title>
       <link href="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1VPN%E4%B8%8D%E8%B5%B0%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%E6%8A%93%E5%8C%85%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
       <url>/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1VPN%E4%B8%8D%E8%B5%B0%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%E6%8A%93%E5%8C%85%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</url>
