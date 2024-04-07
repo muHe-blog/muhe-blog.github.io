@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>记一次VPN不走全局代理抓包解决办法</title>
+      <link href="/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1VPN%E4%B8%8D%E8%B5%B0%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%E6%8A%93%E5%8C%85%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/"/>
+      <url>/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1VPN%E4%B8%8D%E8%B5%B0%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86%E6%8A%93%E5%8C%85%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h3 id="0x00-背景"><a href="#0x00-背景" class="headerlink" title="0x00 背景"></a>0x00 背景</h3><p>站点：内网 web 环境</p><p>访问方式：本地下载VPN连接，访问web站点</p><p>问题：使用burp正常抓包，发现没有响应</p><h3 id="0x01-抓包分析"><a href="#0x01-抓包分析" class="headerlink" title="0x01 抓包分析"></a>0x01 抓包分析</h3><p>1、首先，访问站点，使用burp抓包，发现可以抓到请求包，但没有响应</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685506182023-a3694e39-4600-4e06-8f83-bce6920f1421.png" alt="img"> </p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685506250470-b025a779-0718-4b24-9d95-6e3c18d6fe25.png" alt="img"> </p><p>2、同时，开启burp代理抓包后，web站点不能访问；关闭代理，又可以正常访问：</p><ul><li>关闭代理</li></ul><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685506349900-7fbb17fc-9bda-4454-b977-5f87fc6f9a75.png" alt="img"> </p><ul><li>开启代理</li></ul><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685507580730-a1e5ad74-1c69-41ca-99b7-e32dfc2c2c4f.png" alt="img"> </p><p>3、通过wireshark抓包分析，可以看到，当burp抓包重放后，流量不再经过我们的VPN，而是在发送到了当前WIFI所在内网中：</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685507925816-7cdafb0b-2af8-4f7f-b94b-18db76d36e58.png" alt="img"> </p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685507963760-1baf8e5a-18e0-43cc-8e0c-0849ce60d1c5.png" alt="img"> </p><p>这块的 10.xx.xx.48为目标测试地址；10.101.22.62为当前wifi地址。</p><p>4、初步猜测，是easyconnect VPN不是全局代理，只是针对部分exe类应用，如浏览器(chrome.exe)、cmd.exe等做了代理。</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508467947-789a2546-914a-4059-982a-ade5f626ec37.png" alt="img"> </p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508349290-5d47fd70-74d4-4d48-b071-d315b467106a.png" alt="img"> </p><h3 id="0x02-解决办法"><a href="#0x02-解决办法" class="headerlink" title="0x02 解决办法"></a>0x02 解决办法</h3><p>使用端口转发工具做端口转发。让流量的一个走向为：浏览器-&gt;burp-&gt;端口转发-&gt;VPN-&gt;服务端</p><ul><li>端口转发工具：ew（其它类似工具也可以）</li><li>转发代理：走socks5代理</li></ul><p>1、使用ew设置全局端口转发</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508725893-f498a991-ca40-4f1c-9ce4-a53b999fceb6.png" alt="img"> </p><p>2、burp配置socks代理</p><p>user options –&gt; socks proxy，配置同ew即可</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508759947-578f1e9f-3e74-4699-870b-b9d754238d9f.png" alt="img"> </p><p>3、浏览器开启http代理，正常请求</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508822540-2f8e2d17-0099-4e02-8808-e60959caa24e.png" alt="img"> </p><p>4、使用burp成功抓包</p><p><img src="https://cdn.nlark.com/yuque/0/2023/png/2167914/1685508878419-22eac50a-de54-4122-84b2-5bbb6ad2fb18.png" alt="img"> </p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透测试 </tag>
+            
+            <tag> 抓包 </tag>
+            
+            <tag> VPN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>unveilr反编译微信小程序</title>
       <link href="/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
       <url>/2024/04/06/unveilr%E5%8F%8D%E7%BC%96%E8%AF%91%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/</url>
