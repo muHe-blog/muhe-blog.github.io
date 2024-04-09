@@ -27,6 +27,7 @@ document.onkeydown = function () {
 function a() {
 	// 这里我做的是跳转首页，可以根据实际需要进行其他限制
     var domain = window.location.host;// 获取当前域名
+    alert("请先关闭控制台再访问本站");
     window.location.href = "https://" + domain;
     return false;
 }
