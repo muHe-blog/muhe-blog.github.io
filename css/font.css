@@ -1,0 +1,13 @@
+@font-face{
+    font-family: 'Stefania-drrl6';
+    font-display: swap;
+    src: url('../font/Stefania-drrl6.ttf') format("truetype");
+}
+@font-face{
+    font-family: 'DeltaLake-8OORM';
+    font-display: swap;
+    src: url('../font/DeltaLake-8OORM.ttf') format("truetype");
+}
+body {
+    font-family: 'Stefania-drrl6','DeltaLake-8OORM.ttf';
+}

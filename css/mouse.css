@@ -1,0 +1,9 @@
+ body {
+   cursor:url(/img/pointer/mouse.cur),
+         default;
+ }
+ a,
+ img {
+   cursor:url(/img/pointer/pointer.cur),
+         default;
+ }
