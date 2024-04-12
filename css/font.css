@@ -1,13 +1,13 @@
 @font-face{
-    font-family: 'Stefania-drrl6';
+    font-family: 'JetBrains Mono';
     font-display: swap;
-    src: url('../font/Stefania-drrl6.ttf') format("truetype");
+    src: url('../font/JetBrainsMono-Regular.ttf') format("truetype");
 }
 @font-face{
-    font-family: 'DeltaLake-8OORM';
+    font-family: 'HarmonyOS Sans SC';
     font-display: swap;
-    src: url('../font/DeltaLake-8OORM.ttf') format("truetype");
+    src: url('../font/HarmonyOS_Sans_SC_Regular.ttf') format("truetype");
 }
 body {
-    font-family: 'Stefania-drrl6','DeltaLake-8OORM.ttf';
+    font-family: 'JetBrains Mono','HarmonyOS Sans SC';
 }
