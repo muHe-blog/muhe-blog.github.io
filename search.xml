@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>Gitee搭建免费图床</title>
+      <link href="/2024/04/17/Gitee%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8A/"/>
+      <url>/2024/04/17/Gitee%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E5%9B%BE%E5%BA%8A/</url>
+      
+        <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为什么要搭建图床？？？</p><ol><li>hexo默认可以加载本地文件夹和外部URL的图片，搭建图床后主要用来存储图片，方便管理；</li><li>可以将md文件+对应路径图片打包，方便管理；</li><li>可移植性强。</li></ol><p>还有一个原因，这玩意免费啊！！！</p><p>​Typora+PicGo+Gitee实现图片上传功能<br>​抓紧时间步入正题，Go！</p><h1 id="第一步-配置Gitee仓库"><a href="#第一步-配置Gitee仓库" class="headerlink" title="第一步 配置Gitee仓库"></a>第一步 配置Gitee仓库</h1><p>1、附上<a href="https://gitee.com/">码云gitee</a>地址</p><p>2、注册登录自己的gitee账号</p><p>3、创建仓库，仓库要求公开，so要上传合法图片哒~</p><ul><li>步骤一：创建仓库</li></ul><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170937885.png" alt="image-20240417093654778"> </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170941548.png" alt="image-20240417094102500"> </p><ul><li>步骤二：生成私人令牌（请在备忘录中记下生成的私人令牌 ）</li></ul><p>打开“个人主页”—&gt;“个人设置”—-&gt;“私人令牌”</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170942484.png" alt="image-20240417094222456"> </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170943977.png" alt="image-20240417094311937"> </p><p>点击 “生成新的令牌” ，提交后，将生成的私人令牌保存好，后面会用到。</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170946003.png" alt="image-20240417094637966">  </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404170947800.png" alt="image-20240417094732760"> </p><h1 id="第二步-PicGo的下载及相关配置"><a href="#第二步-PicGo的下载及相关配置" class="headerlink" title="第二步 PicGo的下载及相关配置"></a>第二步 PicGo的下载及相关配置</h1><p>下载地址：<a href="https://github.com/Molunerfinn/PicGo/releases">https://github.com/Molunerfinn/PicGo/releases</a></p><p><strong>1、首先，下载PicGo的安装包</strong></p><p><a href="https://picgo.github.io/PicGo-Doc/zh/guide/#%E5%BA%94%E7%94%A8%E6%A6%82%E8%BF%B0">PicGo官网指南</a><br>一个图床，一个用于快速上传图片并获取图片URL链接的工具，也完全免费。</p><p><strong>2、其次，在PicGo中安装插件</strong></p><p>常见问题：</p><p>\1. 安装插件一直显示“安装中”；</p><p>\2. 使用npm命令安装插件提示： npm不是内部或外部命令，也不是可运行的程序</p><p>解决：Node.js安装及环境配置，这个必须配置的！！</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171006115.png" alt="image-20240417100629083"> </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171020809.png" alt="image-20240417102035779"> </p><p><strong>4、最后，完成PicGo的相关配置</strong></p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171024030.png" alt="image-20240417102414003"> </p><p>提示“设置成功”即可，配置好后进行<strong>重启！！！！！！</strong><br>随后，设置PicGo时，先选择显示的图床为gitee，再上翻进行设置Server</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171050897.png" alt="image-20240417105056869"> </p><p>设置成功后在“上传区”测试图片是否能够成功上传，多试几张图片或者重启PicGo看看</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171051216.png" alt="image-20240417105117184"> </p><h1 id="第三步-Typora的下载及相关配置"><a href="#第三步-Typora的下载及相关配置" class="headerlink" title="第三步 Typora的下载及相关配置"></a>第三步 Typora的下载及相关配置</h1><p>typora是一款支持实时预览的Markdown文本编辑器， 并且完全免费<br>下载地址： <a href="https://www.typora.io/">typora</a></p><p>文件—&gt;偏好设置–&gt;配置PicGo路径</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171052201.png" alt="image-20240417105231175"> </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171053000.png" alt="image-20240417105306966"> </p><p>上传图片之后，图片地址指向码云仓库并且提示上传成功就可了。</p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这样，就可以实现，当使用Typora写文档的时候，无论上传本地&amp;远程的图片，复制过来后，会自动通过PicGo上传到gitee中。</p><p>Typora——&gt;PicGo——&gt;Gitee</p><p> <img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171057563.png" alt="image-20240417105744532"> </p><p>同理，可以看到hexo中的图片加载默认就是从gitee中获取了！！！</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202404/202404171100384.png" alt="image-20240417110017307"> </p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 博客搭建 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图床 </tag>
+            
+            <tag> 博客美化 </tag>
+            
+            <tag> Gitee </tag>
+            
+            <tag> Picgo </tag>
+            
+            <tag> typora </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>hexo主题美化(续)</title>
       <link href="/2024/04/11/hexo%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96-%E7%BB%AD/"/>
       <url>/2024/04/11/hexo%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96-%E7%BB%AD/</url>
