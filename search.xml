@@ -8,9 +8,25 @@
       <link href="/2024/05/04/%E6%94%AF%E4%BB%98%E5%AE%9D%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%8F%8D%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/"/>
       <url>/2024/05/04/%E6%94%AF%E4%BB%98%E5%AE%9D%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%8F%8D%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<meta name="referrer" content="no-referrer"/><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在平常测试微信小程序的时候，会对微信小程序进行一下反编译，看看里面有没有泄露敏感信息，如小程序的key、secret、敏感接口，硬编码等。针对一些金融类的小程序，可能还要对其反编译后获取源码，定位加解密算法，配着脚本实现渗透测试。这块相关的知识，网上有比较多的案例，就不细说了。</p><p>前段时间某运营商，提出针对支付宝中小程序的渗透测试，就在想能不能把支付宝中小程序像微信一样反编译，看看有没有敏感信息泄露。网上找了一圈，关于支付宝小程序反编译案例较少，参考了网上一些教程，简单记录一下支付宝小程序反编译的过程。。。</p><h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><ul><li>已经root过的手机（这块模拟器也行-模拟器默认支持支付宝）</li><li>安卓adb（安装官网下载最新版本的 Platform Tools-包含 ADB）</li></ul><h1 id="定位源码包位置"><a href="#定位源码包位置" class="headerlink" title="定位源码包位置"></a>定位源码包位置</h1><p>1、连上手机以后Windows进入adb shell然后su切换为管理员权限</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">adb shell &amp;&amp; su</span><br></pre></td></tr></table></figure><p>2、然后直接进入支付宝小程序存放目录</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /data/data/com.eg.android.AlipayGphone/files/nebulaInstallApps/</span><br></pre></td></tr></table></figure><p>然后，就可以看到该目录下，对应的小程序列表</p><p>可以按照时间排序，查看最新打开的支付宝小程序</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -lt</span><br></pre></td></tr></table></figure><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061503090.png" alt="image.png"> </p><p>排在最上面的就是最近打开的小程序，从上往下按时间降序，一般都是图中一长串数字的.</p><p>【*】6开头短数字的目录我看的是支付宝加载的服务包。</p><p>3、然后随便进入一个小程序目录查看</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd 6d478a9eea58c23d3de0a047a9534d70</span><br><span class="line">ls</span><br></pre></td></tr></table></figure><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061503700.png" alt="img"> </p><p>这个tar文件就是小程序的源码包，然后让这个文件复制到sdcard目录</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cp 2021004100610928.tar /sdcard/</span><br></pre></td></tr></table></figure><p>然后直接adb pull将源码包导出来</p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">adb pull /sdcard/2021004100610928.tar</span><br></pre></td></tr></table></figure><p>导出后直接解压文件就可以查看源码了</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061503317.png" alt="img"> </p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061505475.png" alt="image.png">  </p><p>最终导出来之后效果图如下</p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061503347.png" alt="img"> </p><p>3、小程序源码使用的是js，而通常会加密、混淆等，如上图的js文件，对于我们分析会有一定的阻碍。</p><p>方法还是有的，只需要对js进行美化即可帮助我们分析，这里推荐一个js美化在线工具：</p><p><a href="https://tool.lu/js/">https://tool.lu/js/</a></p><p><img src="https://gitee.com/jingweihang/img/raw/master/hexo/202405/202405061504971.png" alt="image.png">  </p><h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>支付宝下程序源码包获取还是比较简单的。不需要像微信小程序那样解密，反编译之类的。</p><p>tar压缩文件即为小程序的源码包。这个包没有加密，使用adb pull拿出来，直接解压即可。解压后对js格式化下代码，就可以分析了。js代码没有混淆，条理很清晰</p><h1 id="备注-支付宝小程序抓包"><a href="#备注-支付宝小程序抓包" class="headerlink" title="[备注]支付宝小程序抓包"></a>[备注]<strong>支付宝小程序抓包</strong></h1><p>在查找小程序反编译的时候，看到52pojie一篇关于小程序抓包的文章，可以参考下！</p><p><a href="https://www.52pojie.cn/thread-1050690-1-1.html">https://www.52pojie.cn/thread-1050690-1-1.html</a></p>]]></content>
       
       
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 渗透测试 </tag>
+            
+            <tag> 小程序 </tag>
+            
+            <tag> 支付宝 </tag>
+            
+        </tags>
       
     </entry>
     
