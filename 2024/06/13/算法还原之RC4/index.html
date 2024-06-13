@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>算法还原之RC4 | Muhe's Blog</title><meta name="author" content="Muhe"><meta name="copyright" content="Muhe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="referrer" content="no-referrer"><meta name="description" content="一 简介一次一密对称加密算法：使用最广泛的流密码就是RC4 优点：密钥随机产生，只使用一次；无条件安全、加解密位加法运算效率高 缺点：要求密钥至少与明文一样长，密钥共享困难   流密码（序列密码） 流密码基本思想：  密钥流发生器f产生zi&#x3D;f(k,σ \sigmaσi)，即种子密钥k产生密钥流z&#x3D;z0z1z2… 加密y&#x3D;y0y1y2…&#x3D;Ez0(x0)E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法还原之RC4">
+<meta property="og:url" content="http://example.com/2024/06/13/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8BRC4/index.html">
+<meta property="og:site_name" content="Muhe&#39;s Blog">
+<meta property="og:description" content="一 简介一次一密对称加密算法：使用最广泛的流密码就是RC4 优点：密钥随机产生，只使用一次；无条件安全、加解密位加法运算效率高 缺点：要求密钥至少与明文一样长，密钥共享困难   流密码（序列密码） 流密码基本思想：  密钥流发生器f产生zi&#x3D;f(k,σ \sigmaσi)，即种子密钥k产生密钥流z&#x3D;z0z1z2… 加密y&#x3D;y0y1y2…&#x3D;Ez0(x0)E">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/medias/article_cover/1.jpg">
+<meta property="article:published_time" content="2024-06-13T01:35:40.000Z">
+<meta property="article:modified_time" content="2024-06-13T10:00:39.606Z">
+<meta property="article:author" content="Muhe">
+<meta property="article:tag" content="RC4">
+<meta property="article:tag" content="分组密码">
+<meta property="article:tag" content="算法还原">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/medias/article_cover/1.jpg"><link rel="shortcut icon" href="/img/medias/favicon.png"><link rel="canonical" href="http://example.com/2024/06/13/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8BRC4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '算法还原之RC4',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-13 18:00:39'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="/js/bandev.js"></script><link rel="stylesheet" href="/css/icon.css"><link rel="stylesheet" href="/css/mouse.css"><script src="/js/leaves.js"></script><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="onerror=null;src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/medias/article_cover/1.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Muhe's Blog"><span class="site-name">Muhe's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">算法还原之RC4</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-13T01:35:40.000Z" title="发表于 2024-06-13 09:35:40">2024-06-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-13T10:00:39.606Z" title="更新于 2024-06-13 18:00:39">2024-06-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F/">算法还原</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="算法还原之RC4"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h1><h2 id="一次一密"><a href="#一次一密" class="headerlink" title="一次一密"></a>一次一密</h2><p><strong>对称加密算法</strong>：使用最广泛的流密码就是RC4</p>
+<p>优点：密钥随机产生，只使用一次；无条件安全、加解密位加法运算效率高</p>
+<p>缺点：要求密钥至少与明文一样长，密钥共享困难</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131348677.png" alt="img"> </p>
+<h2 id="流密码（序列密码）"><a href="#流密码（序列密码）" class="headerlink" title="流密码（序列密码）"></a>流密码（序列密码）</h2><ul>
+<li>流密码基本思想：</li>
+</ul>
+<p>密钥流发生器f产生zi&#x3D;f(k,σ \sigmaσi)，即种子密钥k产生密钥流z&#x3D;z0z1z2…</p>
+<p>加密y&#x3D;y0y1y2…&#x3D;Ez0(x0)Ez1(x1)Ez2(x2)…</p>
+<ul>
+<li>有内部记忆原件的为流密码，否则分组密码</li>
+<li>内部记忆原件状态σ \sigmaσi独立于明文的称同步流密码，否则自同步流密码</li>
+<li>同步流密码加密器&#x3D;滚动密钥生成器+加密变换器</li>
+<li>二元加法流密码，加密变换yi&#x3D;zi⨁ \bigoplus⨁xi</li>
+<li>一次一密是加法流密码原型，若zi&#x3D;ki,则加法流密码就退化成一次一密</li>
+<li>密钥流序列性质：极大的周期、良好的统计特性、抗线性分析、抗统计分析</li>
+<li>一次一密的密钥长度和明文一样长，流密码不是，需要种子密钥通过密钥生成器产生密钥流</li>
+</ul>
+<h1 id="二-RC4算法原理"><a href="#二-RC4算法原理" class="headerlink" title="二 RC4算法原理"></a>二 RC4算法原理</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首先，RC4算法所依赖的最根本原理是：对明文使用同一个密钥异或两次最后仍是得到原文。即生成密钥之后，由密钥与明文异或后生成密文（加密过程），由同一密钥与密文异或后得到明文（解密过程）。</p>
+<p><strong>在介绍RC4算法原理之前，先看看算法中的几个关键变量：</strong></p>
+<p>1、密钥流：RC4算法的关键是根据明文和密钥生成相应的密钥流，密钥流的长度和明文的长度是对应的，也就是说明文的长度是500字节，那么密钥流也是500字节。当然，加密生成的密文也是500字节，因为密文第i字节&#x3D;明文第i字节^密钥流第i字节；</p>
+<p>2、状态向量S：长度为256，S[0],S[1]…..S[255]。每个单元都是一个字节，算法运行的任何时候，S都包括0-255的8比特数的排列组合，只不过值的位置发生了变换；</p>
+<p>3、临时向量T：长度也为256，每个单元也是一个字节。如果密钥的长度是256字节，就直接把密钥的值赋给T，否则，轮转地将密钥的每个字节赋给T；</p>
+<p>4、密钥K：长度为1-256字节，注意密钥的长度keylen与明文长度、密钥流的长度没有必然关系，通常密钥的长度趣味16字节（128比特）。</p>
+<h2 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h2><p>下面是对RC4算法具体实现的简单介绍：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131406862.png" alt="img"> </p>
+<p>1、先初始化状态向量S（256个字节，用来作为密钥流生成的种子1）</p>
+<p>按照升序，给每个字节赋值0,1,2,3,4,5,6…..,254,255</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131406935.png" alt="img"> </p>
+<p>2、初始密钥（由用户输入），长度任意。如果输入长度小于256个字节，则进行轮转，直到填满。例如输入密钥的是“1,2,3,4,5”, 那么填入的是1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5……..</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131407542.png" alt="img"> </p>
+<p>由上述轮转过程得到256个字节的向量T（用来作为密钥流生成的种子2）。</p>
+<p>3、开始对状态向量S进行置换操作（用来打乱初始种子1），按照下列规则进行：</p>
+<p>从第零个字节开始，执行256次，保证每个字节都得到处理</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131407174.png" alt="img"> </p>
+<p>4、最后是秘钥流的生成与加密。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131408206.png" alt="img"> </p>
+<p>上面四个步骤简单<strong>总结</strong>一下：</p>
+<ul>
+<li>第一步：生成了初始状态向量S</li>
+<li>第二步：输入初始密钥，生成临时向量T</li>
+<li>第三步：对状态向量S进行置换操作，打乱初始种子，生成S’</li>
+<li>第四步：使用明文和S‘生成最终加密的密钥流</li>
+<li>第五步：使用密钥流对明文进行异或，实现最终加密。</li>
+</ul>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>具体实现代码如下：<a target="_blank" rel="noopener" href="https://github.com/qiaoao-spec/RC4">RC4加解密算法</a></p>
+<p>解密按照前面写的，异或两次就是原文，所以只要把密钥流重新拿过来异或一次就能得到原文了</p>
+<p>下面是调用<strong>python</strong>简单实现的上述所说：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">gen_S</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        S.append(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_Key</span>():</span><br><span class="line">    T = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        T.append(WordList[i % <span class="number">62</span>])</span><br><span class="line">    <span class="keyword">return</span> T</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">permute_S</span>():</span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        j = (j + S[i] + <span class="built_in">ord</span>(T[i])) % <span class="number">256</span></span><br><span class="line">        temp = S[i]</span><br><span class="line">        S[i] = S[j]</span><br><span class="line">        S[j] = temp</span><br><span class="line">    <span class="keyword">return</span> S</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">enc_RC4</span>():</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    num = <span class="number">0</span></span><br><span class="line">    data = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(text1)):</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span></span><br><span class="line">        j = (j + S[i]) % <span class="number">256</span></span><br><span class="line">        temp = S[i]</span><br><span class="line">        S[i] = S[j]</span><br><span class="line">        S[j] = temp</span><br><span class="line">        t = (S[i] + S[j]) % <span class="number">256</span></span><br><span class="line">        data.append(<span class="built_in">chr</span>((<span class="built_in">ord</span>(text1[num]) ^ S[t])))</span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># 第一步</span></span><br><span class="line">    S = []</span><br><span class="line">    gen_S()</span><br><span class="line">    <span class="comment"># 第二步</span></span><br><span class="line">    WordList = <span class="built_in">list</span>(<span class="string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#x27;</span>)</span><br><span class="line">    T = init_Key()</span><br><span class="line">    <span class="comment"># 第三步</span></span><br><span class="line">    permute_S()</span><br><span class="line">    <span class="comment"># 第四步</span></span><br><span class="line">    <span class="comment"># text = &quot;12345&quot;</span></span><br><span class="line">    <span class="comment"># enc_RC4()</span></span><br><span class="line">    <span class="comment"># 第五步</span></span><br><span class="line">    text1 = [<span class="string">&#x27;£&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, <span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;\x16&#x27;</span>]</span><br><span class="line">    enc_RC4()</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131433047.png" alt="image.png"> </p>
+<h1 id="三-实现标准RC4算法"><a href="#三-实现标准RC4算法" class="headerlink" title="三 实现标准RC4算法"></a>三 实现标准RC4算法</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rc4_init</span><span class="params">(<span class="type">char</span> s[<span class="number">256</span>], <span class="type">char</span> *pwd, <span class="type">int</span> len)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rc4_enc</span><span class="params">(<span class="type">char</span> s[<span class="number">256</span>], <span class="type">char</span> *data, <span class="type">int</span> len)</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rc4_init</span><span class="params">(<span class="type">char</span> S[<span class="number">256</span>], <span class="type">char</span> *K, <span class="type">size_t</span> len)</span> &#123;</span><br><span class="line">    <span class="type">char</span> T[<span class="number">256</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i) &#123;</span><br><span class="line">        S[i] = i;</span><br><span class="line">        T[i] = K[i % len];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i) &#123;</span><br><span class="line">        j = (j + S[i] + T[i]) % <span class="number">256</span>;</span><br><span class="line">        swap(S[i],S[j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">rc4_enc</span><span class="params">(<span class="type">char</span> S[<span class="number">256</span>], <span class="type">char</span> *data, <span class="type">int</span> len)</span> &#123;</span><br><span class="line">    <span class="type">int</span> i , j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; len; ++k) &#123;</span><br><span class="line">        i = (i + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">        j = (j + S[i]) % <span class="number">256</span>;</span><br><span class="line">        swap(S[i],S[j]);</span><br><span class="line">        <span class="type">int</span> t = (S[i] + S[j]) % <span class="number">256</span>;</span><br><span class="line">        *(data + k) ^= S[t];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line">    JNIEXPORT jstring JNICALL</span><br><span class="line"><span class="title function_">Java_com_roysue_rc4_MainActivity_rc4</span><span class="params">(JNIEnv *env, jobject thiz, jbyteArray data)</span> &#123;</span><br><span class="line">    jbyte *t_data = env-&gt;GetByteArrayElements(data,<span class="number">0</span>);</span><br><span class="line">    env-&gt;ReleaseByteArrayElements(data,t_data,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> *c_data = reinterpret_cast&lt;<span class="type">char</span> *&gt;(t_data);</span><br><span class="line">    <span class="type">int</span> len = env-&gt;GetArrayLength(data);</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> S[<span class="number">256</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="type">char</span> *pwd = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line">    rc4_init(S,pwd,len);</span><br><span class="line">    rc4_enc(S,c_data,len);</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(c_data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="四-RC4算法汇编分析"><a href="#四-RC4算法汇编分析" class="headerlink" title="四 RC4算法汇编分析"></a>四 RC4算法汇编分析</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131441725.png" alt="image.png"> </p>
+<p>上图中的代码是没有进行变量抽取之前的，可以看到函数名都还是可以看到的。</p>
+<p>可以在代码中加上如下代码，进行变量抽取：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">set (CMAKE_CXX_FLAGS &quot;$(CMAKE_CXX_FLAGS&quot; -fvisibility=hidden)</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202406/202406131441940.png" alt="image.png"> </p>
+<p>整个汇编代码基本和C的区别不大，这块就不细看了。。。。</p>
+<p><strong>RC4算法的特征有</strong>：</p>
+<ul>
+<li>首先根据原理我们可以看到会初始化一个256字节的数组</li>
+<li>其次会将一个key也填充到数组中</li>
+<li>函数的话大概率都是两个参数,一个是key 一个是keylen</li>
+</ul>
+<p>具体分析，可以见<a target="_blank" rel="noopener" href="https://blog.csdn.net/abel_big_xu/article/details/115646413">逆向分析中的密码学—RC4_rc4逆向-CSDN博客</a></p>
+<h1 id="五-总结"><a href="#五-总结" class="headerlink" title="五 总结"></a>五 总结</h1><p>RC4算法本身实现并不复杂，只要熟悉其加密&#x2F;解密流程，逆向分析过程中一般都能很好的进行识别。<br>分析其它标准加密算法基本也是同样的流程，对于自定义的一些加密算法就需要耐心的跟踪分析了。<br>另外对于标准加密算法，也可以借助PEID的“Krypto ANALyzer”插件，或者IDA的“FindCrypt2”插件进行识别，使用这些插件能够更好地提高工作效率。</p>
+<p>一般不怎么会在渗透过程中遇到RC4算法的，主要不方便，还要求一次一密。。。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Muhe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/06/13/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8BRC4/">http://example.com/2024/06/13/算法还原之RC4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Muhe's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RC4/">RC4</a><a class="post-meta__tags" href="/tags/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81/">分组密码</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F/">算法还原</a></div><div class="post_share"><div class="social-share" data-image="/img/medias/article_cover/1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/06/12/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%95%B0%E5%AD%97%E4%BF%A1%E5%B0%81%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/" title="小程序数字信封算法分析"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/24.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">小程序数字信封算法分析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/05/16/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8Bbase64/" title="算法还原之base64"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/7.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-16</div><div class="title">算法还原之base64</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="this.onerror=null;this.src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Muhe</div><div class="author-info__description">凡心所向，素履所往，生如逆旅，一苇以航</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">亲爱的读者们，您好！感谢您选择浏览我的博客，这里是我分享知识、见解和心得的小天地。祝您阅读愉快！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E6%AC%A1%E4%B8%80%E5%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">一次一密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E5%AF%86%E7%A0%81%EF%BC%88%E5%BA%8F%E5%88%97%E5%AF%86%E7%A0%81%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">流密码（序列密码）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-RC4%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">二 RC4算法原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.2.</span> <span class="toc-text">实现步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.3.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E5%AE%9E%E7%8E%B0%E6%A0%87%E5%87%86RC4%E7%AE%97%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">三 实现标准RC4算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-RC4%E7%AE%97%E6%B3%95%E6%B1%87%E7%BC%96%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">四 RC4算法汇编分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">五 总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/06/13/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8BRC4/" title="算法还原之RC4"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="算法还原之RC4"/></a><div class="content"><a class="title" href="/2024/06/13/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8BRC4/" title="算法还原之RC4">算法还原之RC4</a><time datetime="2024-06-13T01:35:40.000Z" title="发表于 2024-06-13 09:35:40">2024-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/12/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%95%B0%E5%AD%97%E4%BF%A1%E5%B0%81%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/" title="小程序数字信封算法分析"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/24.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="小程序数字信封算法分析"/></a><div class="content"><a class="title" href="/2024/06/12/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%95%B0%E5%AD%97%E4%BF%A1%E5%B0%81%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/" title="小程序数字信封算法分析">小程序数字信封算法分析</a><time datetime="2024-06-12T09:56:54.000Z" title="发表于 2024-06-12 17:56:54">2024-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/06/%E5%BA%94%E6%80%A5%E6%BC%94%E7%BB%83%E5%8B%92%E7%B4%A2%E6%A0%B7%E6%9C%AC%E5%8F%82%E8%80%83/" title="应急演练勒索样本参考"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/8.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="应急演练勒索样本参考"/></a><div class="content"><a class="title" href="/2024/06/06/%E5%BA%94%E6%80%A5%E6%BC%94%E7%BB%83%E5%8B%92%E7%B4%A2%E6%A0%B7%E6%9C%AC%E5%8F%82%E8%80%83/" title="应急演练勒索样本参考">应急演练勒索样本参考</a><time datetime="2024-06-06T06:13:08.000Z" title="发表于 2024-06-06 14:13:08">2024-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/01/%E7%BB%95%E8%BF%87%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E8%BD%B0%E7%82%B8/" title="绕过图片验证码实现短信轰炸"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="绕过图片验证码实现短信轰炸"/></a><div class="content"><a class="title" href="/2024/06/01/%E7%BB%95%E8%BF%87%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E8%BD%B0%E7%82%B8/" title="绕过图片验证码实现短信轰炸">绕过图片验证码实现短信轰炸</a><time datetime="2024-06-01T14:21:37.000Z" title="发表于 2024-06-01 22:21:37">2024-06-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/16/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8Bbase64/" title="算法还原之base64"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/7.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="算法还原之base64"/></a><div class="content"><a class="title" href="/2024/05/16/%E7%AE%97%E6%B3%95%E8%BF%98%E5%8E%9F%E4%B9%8Bbase64/" title="算法还原之base64">算法还原之base64</a><time datetime="2024-05-16T06:47:20.000Z" title="发表于 2024-05-16 14:47:20">2024-05-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/medias/article_cover/1.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Muhe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="2520739691" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrcType="-1"> </div><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"width":200,"height":400,"position":"right","hOffset":0,"vOffset":-130},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: true,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
