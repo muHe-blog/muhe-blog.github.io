@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>frida-labs(1) | Muhe's Blog</title><meta name="author" content="Muhe"><meta name="copyright" content="Muhe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="referrer" content="no-referrer"><meta name="description" content="介绍下载地址：DERE-ad2001&#x2F;Frida-Labs：该仓库包含一系列学习 Frida for Android Exploitation 的挑战。 — DERE-ad2001&#x2F;Frida-Labs: The repo contains a series of challenges for learning Frida for Android Exploitation.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="frida-labs(1)">
+<meta property="og:url" content="http://example.com/2024/07/27/frida-labs(1)/index.html">
+<meta property="og:site_name" content="Muhe&#39;s Blog">
+<meta property="og:description" content="介绍下载地址：DERE-ad2001&#x2F;Frida-Labs：该仓库包含一系列学习 Frida for Android Exploitation 的挑战。 — DERE-ad2001&#x2F;Frida-Labs: The repo contains a series of challenges for learning Frida for Android Exploitation.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/medias/article_cover/15.jpg">
+<meta property="article:published_time" content="2024-07-27T09:33:18.000Z">
+<meta property="article:modified_time" content="2024-07-28T11:17:31.756Z">
+<meta property="article:author" content="Muhe">
+<meta property="article:tag" content="frida-labs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/medias/article_cover/15.jpg"><link rel="shortcut icon" href="/img/medias/favicon.png"><link rel="canonical" href="http://example.com/2024/07/27/frida-labs(1)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'frida-labs(1)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-28 19:17:31'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="/js/bandev.js"></script><link rel="stylesheet" href="/css/icon.css"><link rel="stylesheet" href="/css/mouse.css"><script src="/js/leaves.js"></script><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="onerror=null;src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">75</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/medias/article_cover/15.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Muhe's Blog"><span class="site-name">Muhe's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">frida-labs(1)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-27T09:33:18.000Z" title="发表于 2024-07-27 17:33:18">2024-07-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-07-28T11:17:31.756Z" title="更新于 2024-07-28 19:17:31">2024-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="frida-labs(1)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="下载地址："><a href="#下载地址：" class="headerlink" title="下载地址："></a>下载地址：</h2><p><a target="_blank" rel="noopener" href="https://github.com/DERE-ad2001/Frida-Labs">DERE-ad2001&#x2F;Frida-Labs：该仓库包含一系列学习 Frida for Android Exploitation 的挑战。 — DERE-ad2001&#x2F;Frida-Labs: The repo contains a series of challenges for learning Frida for Android Exploitation. (github.com)</a></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271737543.png" alt="image-20240727173730434"> </p>
+<h2 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h2><p>项目中包含了11个不同的实战案例，分别从java层到Native层，介绍了常见的Frida API使用场景：</p>
+<ul>
+<li>challenge 0x01：hook普通方法</li>
+<li>challenge 0x02：调用静态方法</li>
+<li>challenge 0x03：更改变量的值</li>
+<li>challenge 0x04：创建实例对象</li>
+<li>challenge 0x05：在现有实例上调用方法</li>
+<li>challenge 0x06：调用带有对象参数的方法</li>
+<li>challenge 0x07：hook构造函数</li>
+<li>challenge 0x08：hook so层函数</li>
+<li>challenge 0x09：更改so层函数返回值</li>
+<li>challenge 0x0A：调用原生函数</li>
+<li>challenge 0x0B：使用 X86Writer 和 ARM64Writer 修补汇编</li>
+</ul>
+<h1 id="challenge-0x01"><a href="#challenge-0x01" class="headerlink" title="challenge 0x01"></a>challenge 0x01</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271746119.png" alt="image.png"> </p>
+<p>1、提示【Try again】。使用jadx反编译后打开，定位到关键代码处：</p>
+<ul>
+<li>可以直接搜索 “Try again”，适用于代码较多的情况下</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271746405.png" alt="image.png"> </p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271746264.png" alt="image.png"> </p>
+<ul>
+<li>代码比较少，可以直接看MainActivity类</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271746195.png" alt="image.png"> </p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271746956.png" alt="image.png"> </p>
+<p>2、分析代码，可以先定位到 <strong>check</strong> 函数</p>
+<p>当(i * 2) + 4 &#x3D;&#x3D; i2的时候，可以执行下一步的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(i * 2) + 4 == i2</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271747256.png" alt="image.png"> </p>
+<p>3、查看调用了check函数的地方，定位到了 oncreate 函数</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271747889.png" alt="image.png"> </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MainActivity.this.check(i, Integer.parseInt(obj));</span><br></pre></td></tr></table></figure>
+
+<p>其中参数 i 和 Integer.parseInt(obj)分别为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">final int i = get_random();   //通过get_random得到</span><br><span class="line">String obj = editText.getText().toString();  //用户输入</span><br></pre></td></tr></table></figure>
+
+<p>3、所以，可以得到逻辑为：</p>
+<p>通过get_random()函数得到的随机值，经过运算后，得到我们输入的值即可通过校验。</p>
+<p>所以，这块只需要hook掉 get_random()函数，让他返回一个固定值即可。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271747367.png" alt="image.png"> </p>
+<p>4、Frida代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> className = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x1.MainActivity&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> method = className.<span class="property">get_random</span>;</span><br><span class="line"></span><br><span class="line">    method.<span class="property">implementation</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;get_random function called&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Returning 5&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p>直接让 get_random 函数的返回值为5，则用户输入应该为 5*2+4&#x3D;14</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271748402.png" alt="image.png"> </p>
+<h1 id="challenge-0x02"><a href="#challenge-0x02" class="headerlink" title="challenge 0x02"></a>challenge 0x02</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271750644.png" alt="image.png"> </p>
+<p>1、定位到MainActivity类中，找到了get_flag函数</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271751607.png" alt="image.png"> </p>
+<p>2、全局搜索，没有发现调用 get_flag函数的地方，也就是说，这块定义了一个函数，但是没有做引用</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271751074.png" alt="image.png"> </p>
+<p>3、所以，这块使用Frida调用 get_flag函数，并且要求传入的参数为 4919</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271751803.png" alt="image.png"> </p>
+<p>4、代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x2.MainActivity&quot;</span>);</span><br><span class="line">       </span><br><span class="line">        a.<span class="title function_">get_flag</span>(<span class="number">4919</span>);  <span class="comment">// method name</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271752348.png" alt="image.png"> </p>
+<p>5、也可以不写脚本，直接frida中输入代码hook即可：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271754982.png" alt="image-20240727175406935"> </p>
+<h1 id="challenge-0x03"><a href="#challenge-0x03" class="headerlink" title="challenge 0x03"></a>challenge 0x03</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271816418.png" alt="image.png"> </p>
+<p>1、jadx查看MainActivity类，定位到了onClick方法：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271816297.png" alt="image.png"> </p>
+<p>2、查看代码逻辑，当Checker.code &#x3D;&#x3D; 512的时候，执行后续代码，当不等于512的时候，返回 try again！</p>
+<p>定位到Checker.code处：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271817926.png" alt="image.png"> </p>
+<p>code是一个静态成员变量。</p>
+<p>3、这块有两种方法进行HOOk：</p>
+<p>①直接hook修改静态成本变量Checker.code的值</p>
+<p>②hook increase方法，使用for循环执行 512&#x2F;2&#x3D;216次</p>
+<p>方法一：Hook成员变量</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x3.Checker&quot;</span>);  <span class="comment">// class reference</span></span><br><span class="line">        a.<span class="property">code</span>.<span class="property">value</span> = <span class="number">512</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271817504.png" alt="image.png"> </p>
+<p>方法二：Hook对应方法</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//方法一</span></span><br><span class="line">        <span class="comment">// var a = Java.use(&quot;com.ad2001.frida0x3.Checker&quot;);  // class reference</span></span><br><span class="line">        <span class="comment">// a.code.value = 512;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//方法二</span></span><br><span class="line">        <span class="keyword">var</span> className = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x3.Checker&quot;</span>);  <span class="comment">// class reference</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">256</span>; i++) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Calling increase() method &quot;</span> + i + <span class="string">&quot; times&quot;</span>);</span><br><span class="line">            className.<span class="title function_">increase</span>();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> code_value = className.<span class="property">code</span>.<span class="property">value</span>;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Current variable value: &quot;</span> + code_value);</span><br><span class="line">        &#125;      </span><br><span class="line">    </span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271818574.png" alt="image.png"> </p>
+<h1 id="challenge-0x04"><a href="#challenge-0x04" class="headerlink" title="challenge 0x04"></a>challenge 0x04</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271818212.png" alt="image.png"> </p>
+<p>1、jadx反编译后定位到了MainActivity，查看后没有发现有用信息：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271823551.png" alt="image.png"> </p>
+<p>2、查看另一个类Check，里面定义了一个 get_flag方法</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271823662.png" alt="image.png"> </p>
+<p>3、要求传入的参数值a &#x3D; 1337，才会继续向下执行。</p>
+<p>由于没有在MainActivity中发现实例化的Check类。</p>
+<p>所以，可以先使用$new()新建一个Check的实例对象，然后调用get_flag方法，打印输出即可。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> check = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x4.Check&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> check_obj = check.$new(); <span class="comment">// Class Object</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> res = check_obj.<span class="title function_">get_flag</span>(<span class="number">1337</span>); <span class="comment">// Calling the method</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;FLAG--1 &quot;</span> + res);</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271823924.png" alt="image.png"> </p>
+<p>这块的get_flag方法是非静态方法，创建实例后也可以使用Java.choose来进行hook定位</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">var</span> check = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x4.Check&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> check_obj = check.$new(); <span class="comment">// Class Object</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//方法一</span></span><br><span class="line">        <span class="keyword">var</span> res = check_obj.<span class="title function_">get_flag</span>(<span class="number">1337</span>); <span class="comment">// Calling the method</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;FLAG--1 &quot;</span> + res);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//方法二</span></span><br><span class="line">        <span class="title class_">Java</span>.<span class="title function_">choose</span>(<span class="string">&#x27;com.ad2001.frida0x4.Check&#x27;</span>, &#123;</span><br><span class="line">            <span class="attr">onMatch</span>: <span class="keyword">function</span>(<span class="params">instance</span>)&#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Found `HookedObject` instance:&quot;</span>, instance);</span><br><span class="line">                <span class="keyword">var</span> res = instance.<span class="title function_">get_flag</span>(<span class="number">1337</span>);</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;FLAG--2 &quot;</span> + res);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">onComplete</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Found Completed&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271824487.png" alt="image.png"> </p>
+<h1 id="challenge-0x05"><a href="#challenge-0x05" class="headerlink" title="challenge 0x05"></a>challenge 0x05</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271824534.png" alt="image.png"> </p>
+<p>jadx反编译，定位到关键函数：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271824392.png" alt="image.png"> </p>
+<p>查看关键代码 if (code &#x3D;&#x3D; 1337) 的执行函数后续代码：</p>
+<p>所以，这块可以参考上节demo的做法。</p>
+<p>这块有个问题，就是不能直接 $new 创建一个实例后再调用 flag 方法。</p>
+<p>原因：flag函数在MainActivity类中，一般MainActivity是由程序直接创建的，不会通过代码来调用。</p>
+<p>所以，这块使用 Java.choose 定位到实例，然后再调用即可：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="title class_">Java</span>.<span class="title function_">choose</span>(<span class="string">&quot;com.ad2001.frida0x5.MainActivity&quot;</span>,&#123;</span><br><span class="line">            <span class="attr">onMatch</span>: <span class="keyword">function</span>(<span class="params">instance</span>)&#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Found MainActivity instance: &quot;</span> + instance);</span><br><span class="line">                instance.<span class="title function_">flag</span>(<span class="number">1337</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">onComplete</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;</span><br><span class="line">        &#125; )</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271825098.png" alt="be5e86773b1bc66d0102b73b08a3bd8.png"> </p>
+<h1 id="challenge-0x06"><a href="#challenge-0x06" class="headerlink" title="challenge 0x06"></a>challenge 0x06</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271915745.png" alt="image.png"> </p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271915856.png" alt="image.png"> </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if (1234 == A.num1 &amp;&amp; 4321 == A.num2)</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271915240.png" alt="image.png"> MainActivity中的get_flag方法，传参为 Checker的一个实例。</p>
+<p>但是没有在MainActivity中发现调用get_flag方法的代码，所以，这块需要定位到实例后主动调用；</p>
+<p>因为if判断中对Check类的两个成员变量有要求，所以，还需要实例化一个Check类并对成员变量进行初始化。</p>
+<p>代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="title class_">Java</span>.<span class="title function_">choose</span>(<span class="string">&#x27;com.ad2001.frida0x6.MainActivity&#x27;</span>, &#123;</span><br><span class="line">          <span class="attr">onMatch</span>: <span class="keyword">function</span>(<span class="params">instance</span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Instance found&quot;</span>);</span><br><span class="line">      </span><br><span class="line">            <span class="keyword">var</span> checker = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x6.Checker&quot;</span>);</span><br><span class="line">            <span class="keyword">var</span> checker_obj  = checker.$new();  <span class="comment">// Class Object</span></span><br><span class="line">            checker_obj.<span class="property">num1</span>.<span class="property">value</span> = <span class="number">1234</span>; <span class="comment">// num1</span></span><br><span class="line">            checker_obj.<span class="property">num2</span>.<span class="property">value</span> = <span class="number">4321</span>; <span class="comment">// num2</span></span><br><span class="line">            instance.<span class="title function_">get_flag</span>(checker_obj); <span class="comment">// invoking the get_flag method</span></span><br><span class="line">      </span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="attr">onComplete</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;&#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main)</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271915963.png" alt="image.png"> </p>
+<h1 id="challenge-0x07"><a href="#challenge-0x07" class="headerlink" title="challenge 0x07"></a>challenge 0x07</h1><p>本质是要Hook构造函数 : <strong>$init</strong></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271916674.png" alt="image.png"> </p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271916532.png" alt="image.png"> </p>
+<p>代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="title class_">Java</span>.<span class="title function_">choose</span>(<span class="string">&quot;com.ad2001.frida0x7.MainActivity&quot;</span>, &#123;</span><br><span class="line">            <span class="attr">onMatch</span>: <span class="keyword">function</span>(<span class="params">instance</span>) &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Found instance of MainActivity&quot;</span>);</span><br><span class="line">                <span class="keyword">var</span> check_class = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.ad2001.frida0x7.Checker&quot;</span>);</span><br><span class="line">                <span class="comment">// check_class.$init.implementation = function(arg1, arg2) &#123;</span></span><br><span class="line">                <span class="comment">//     console.log(&quot;Check class initialized&quot;);</span></span><br><span class="line">                <span class="comment">//     arg1 = 513;</span></span><br><span class="line">                <span class="comment">//     arg2 = 513;</span></span><br><span class="line">                <span class="comment">//     return this.$init(arg1, arg2);</span></span><br><span class="line">                <span class="comment">// &#125;</span></span><br><span class="line">                instance.<span class="title function_">flag</span>(check_class.$new(<span class="number">513</span>, <span class="number">513</span>));</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">onComplete</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Done&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;); </span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(main);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202407/202407271920866.png" alt="image.png"> </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Muhe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/07/27/frida-labs(1)/">http://example.com/2024/07/27/frida-labs(1)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Muhe's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/frida-labs/">frida-labs</a></div><div class="post_share"><div class="social-share" data-image="/img/medias/article_cover/15.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/07/27/frida-labs(2)/" title="frida-labs08-09"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">frida-labs08-09</div></div></a></div><div class="next-post pull-right"><a href="/2024/07/14/frida%20Native%E5%B1%82hook/" title="fridaNative层hook"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/15.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">fridaNative层hook</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/07/27/frida-labs(2)/" title="frida-labs08-09"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">frida-labs08-09</div></div></a></div><div><a href="/2024/07/27/frida-labs(3)/" title="frida-labs0A"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/19.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-27</div><div class="title">frida-labs0A</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="this.onerror=null;this.src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Muhe</div><div class="author-info__description">凡心所向，素履所往，生如逆旅，一苇以航</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">75</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">亲爱的读者们，您好！感谢您选择浏览我的博客，这里是我分享知识、见解和心得的小天地。祝您阅读愉快！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">下载地址：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">1.2.</span> <span class="toc-text">介绍</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x01"><span class="toc-number">2.</span> <span class="toc-text">challenge 0x01</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x02"><span class="toc-number">3.</span> <span class="toc-text">challenge 0x02</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x03"><span class="toc-number">4.</span> <span class="toc-text">challenge 0x03</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x04"><span class="toc-number">5.</span> <span class="toc-text">challenge 0x04</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x05"><span class="toc-number">6.</span> <span class="toc-text">challenge 0x05</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x06"><span class="toc-number">7.</span> <span class="toc-text">challenge 0x06</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#challenge-0x07"><span class="toc-number">8.</span> <span class="toc-text">challenge 0x07</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/07/27/frida-labs(3)/" title="frida-labs0A"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/19.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="frida-labs0A"/></a><div class="content"><a class="title" href="/2024/07/27/frida-labs(3)/" title="frida-labs0A">frida-labs0A</a><time datetime="2024-07-27T11:22:00.000Z" title="发表于 2024-07-27 19:22:00">2024-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/27/frida-labs(2)/" title="frida-labs08-09"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="frida-labs08-09"/></a><div class="content"><a class="title" href="/2024/07/27/frida-labs(2)/" title="frida-labs08-09">frida-labs08-09</a><time datetime="2024-07-27T11:21:54.000Z" title="发表于 2024-07-27 19:21:54">2024-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/27/frida-labs(1)/" title="frida-labs(1)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/15.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="frida-labs(1)"/></a><div class="content"><a class="title" href="/2024/07/27/frida-labs(1)/" title="frida-labs(1)">frida-labs(1)</a><time datetime="2024-07-27T09:33:18.000Z" title="发表于 2024-07-27 17:33:18">2024-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/14/frida%20Native%E5%B1%82hook/" title="fridaNative层hook"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/15.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="fridaNative层hook"/></a><div class="content"><a class="title" href="/2024/07/14/frida%20Native%E5%B1%82hook/" title="fridaNative层hook">fridaNative层hook</a><time datetime="2024-07-14T08:07:52.000Z" title="发表于 2024-07-14 16:07:52">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/10/objection%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" title="objection工具使用"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/22.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="objection工具使用"/></a><div class="content"><a class="title" href="/2024/07/10/objection%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" title="objection工具使用">objection工具使用</a><time datetime="2024-07-10T01:04:12.000Z" title="发表于 2024-07-10 09:04:12">2024-07-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/medias/article_cover/15.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Muhe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="2520739691" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrcType="-1"> </div><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/sakura.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"width":200,"height":400,"position":"right","hOffset":0,"vOffset":-130},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: true,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
