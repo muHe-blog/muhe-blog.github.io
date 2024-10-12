@@ -1,0 +1,386 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>配置RPC和开发姿势 | Muhe's Blog</title><meta name="author" content="Muhe"><meta name="copyright" content="Muhe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="referrer" content="no-referrer"><meta name="description" content="Frida是一款基于Python和JavaScript的进程级Hook框架，其中JavaScript语言承担了Hook的主要工作，而Python语言则相当于提供给外界的绑定接口，使用者可以通过Python语言将JavaScript脚本注入进程中，官方也在下方仓库中提供了Python远程调用JavaScript中函数的方式： https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida-pyth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置RPC和开发姿势">
+<meta property="og:url" content="http://example.com/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-%E9%85%8D%E7%BD%AERPC%E5%92%8C%E5%BC%80%E5%8F%91%E5%A7%BF%E5%8A%BF/index.html">
+<meta property="og:site_name" content="Muhe&#39;s Blog">
+<meta property="og:description" content="Frida是一款基于Python和JavaScript的进程级Hook框架，其中JavaScript语言承担了Hook的主要工作，而Python语言则相当于提供给外界的绑定接口，使用者可以通过Python语言将JavaScript脚本注入进程中，官方也在下方仓库中提供了Python远程调用JavaScript中函数的方式： https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida-pyth">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/medias/article_cover/12.jpg">
+<meta property="article:published_time" content="2024-10-08T01:32:39.000Z">
+<meta property="article:modified_time" content="2024-10-12T03:29:34.391Z">
+<meta property="article:author" content="Muhe">
+<meta property="article:tag" content="Frida">
+<meta property="article:tag" content="Rpc">
+<meta property="article:tag" content="主动调用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/medias/article_cover/12.jpg"><link rel="shortcut icon" href="/img/medias/favicon.png"><link rel="canonical" href="http://example.com/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-%E9%85%8D%E7%BD%AERPC%E5%92%8C%E5%BC%80%E5%8F%91%E5%A7%BF%E5%8A%BF/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '配置RPC和开发姿势',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-12 11:29:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="/js/bandev.js"></script><link rel="stylesheet" href="/css/icon.css"><link rel="stylesheet" href="/css/mouse.css"><script src="/js/leaves.js"></script><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="onerror=null;src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">89</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/medias/article_cover/12.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Muhe's Blog"><span class="site-name">Muhe's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">配置RPC和开发姿势</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-08T01:32:39.000Z" title="发表于 2024-10-08 09:32:39">2024-10-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-12T03:29:34.391Z" title="更新于 2024-10-12 11:29:34">2024-10-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="配置RPC和开发姿势"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<p>Frida是一款基于Python和JavaScript的进程级Hook框架，其中JavaScript语言承担了Hook的主要工作，而Python语言则相当于提供给外界的绑定接口，使用者可以通过Python语言将JavaScript脚本注入进程中，官方也在下方仓库中提供了Python远程调用JavaScript中函数的方式：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/frida/frida-python"><strong>https://github.com/frida/frida-python</strong></a></p>
+<p>下面简单介绍下通过Python实现Frida注入的基本方式。</p>
+<h1 id="0x00-开发环境准备"><a href="#0x00-开发环境准备" class="headerlink" title="0x00 开发环境准备"></a>0x00 开发环境准备</h1><p>工欲善其事，必先利其器。编写 frida js 时让 IDE 智能提示【使用 IDE 编写 frida js 时智能提示】</p>
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><ul>
+<li><strong>git clone <a target="_blank" rel="noopener" href="https://github.com/oleavr/frida-agent-example.git">https://github.com/oleavr/frida-agent-example.git</a></strong></li>
+<li>**cd frida-agent-example&#x2F;**，执行命令 <strong>npm install</strong></li>
+<li>然后使用 VSCode、pycharm、idea 等 IDE 打开此工程，在 agent 目录下编写 JavaScript 代码时就会有智能提示。</li>
+</ul>
+<h3 id="JS单步调试"><a href="#JS单步调试" class="headerlink" title="JS单步调试"></a>JS单步调试</h3><p><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265160.htm">https://bbs.pediy.com/thread-265160.htm</a></p>
+<p>能愉快的单步调试 frida 的 js 脚本，可以方便不少。首先运行 frida 脚本</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">frida -l &lt;/Users/name/path/test.js&gt; --debug --runtime=v8 &lt;port/name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>或者：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">session = dev.attach(app.pid)</span><br><span class="line">script = session.create_script(jscode, runtime=<span class="string">&quot;v8&quot;</span>)</span><br><span class="line">session.enable_debugger()</span><br></pre></td></tr></table></figure>
+
+<p>启动后会回显 Inspector 正在监听 9229 默认端口</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Chrome Inspector server listening on port <span class="number">9229</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="chrome"><a href="#chrome" class="headerlink" title="chrome"></a>chrome</h4><p>打开 chrome:&#x2F;&#x2F;inspect, 点击 <code>Open dedicated DevTools for Node。</code></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410081422305.png" alt="image.png"> </p>
+<p>此时 debug 已经连接，切换至 <code>Sources</code>，按 <code>Command + P</code> 加载要调试的脚本，即可下断调试了。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410081422998.png" alt="image.png"> </p>
+<h4 id="pycharm"><a href="#pycharm" class="headerlink" title="pycharm"></a>pycharm</h4><p>首先安装 Node.js 插件，重启。添加调试器 <code>Attaching to Node.js/Chrome</code>，端口默认即可。<code>Attach to</code> 应选择 <code>Node.js &lt; 8 started with --debug</code>， 下面的自动重连选项可选可不选。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410081424191.png" alt="image.png"> </p>
+<p>触发断点需要在 debug 窗口切换到 script 选项卡，右键要调试的脚本，选择 Open Actual Source，在新打开的 Actual Source 窗口设置好断点后，需要再取消&#x2F;启用一次所有断点作为激活，发现断点上打上对勾才真正可用了。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410081424695.png" alt="image.png"> </p>
+<p>接下来就可以正常调试了</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410081424106.png" alt="image.png"> </p>
+<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><ol>
+<li>用 Chrome 调试支持的更为顺滑，调试脚本自动重加载，断点也能正确响应。</li>
+<li>用 PyCharm 调试断点有时需要手动激活有点麻烦，但可以使用PyCharm 的Debug 窗口和快捷键。</li>
+<li>PyCharm 使用 ts 环境调试时，可以直接在ts文件上下断，也不需要手动激活断点。</li>
+</ol>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/airuozhaoyang/article/details/110789942">https://bbs.pediy.com/thread-258513.htm</a></p>
+<h3 id="基础Frida代码完成"><a href="#基础Frida代码完成" class="headerlink" title="基础Frida代码完成"></a>基础Frida代码完成</h3><p>frida 代码提示插件。如果你安装了 Frida, 不管你熟不熟悉 nodejs 的生态, 肯定已经安装好了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">npm install @types/frida-gum</span><br></pre></td></tr></table></figure>
+
+<p>你需要在你编写注入 js 文件的目录下运行 ( 可以不事先创建 package.json，只是会出现一条警告 )</p>
+<p>然后使用可以TypeScript代码完成功能的编辑器 ( 比如 vscode、pycharm、idea ) 打开js文件即刻。</p>
+<p>“<strong>基础 frida 代码完成</strong>“ 就可以补全 frida js 代码，如果想要 类成员函数及成员变量的类型等功能，可以安装插件 <strong>frida-tsplugin</strong> </p>
+<h3 id="下载并安装插件-frida-tsplugin"><a href="#下载并安装插件-frida-tsplugin" class="headerlink" title="下载并安装插件 frida-tsplugin"></a>下载并安装插件 <strong>frida-tsplugin</strong></h3><p>在任意目录下：<strong>git clone <a target="_blank" rel="noopener" href="https://github.com/tacesrever/frida-tsplugin">https://github.com/tacesrever/frida-tsplugin</a></strong> ，然后在 frida-tsplugin 目录下运行</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm run <span class="built_in">compile</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Frida-tsplugin-特性"><a href="#Frida-tsplugin-特性" class="headerlink" title="Frida-tsplugin 特性"></a><strong>Frida-tsplugin</strong> 特性</h3><ol>
+<li>可以识别 Java.use 和 Java.cast</li>
+<li>可以追踪变量赋值传递</li>
+<li>可以识别并追踪类成员函数及成员变量的类型</li>
+<li>可以根据重载函数的参数类型识别对应的重载函数</li>
+<li>可以识别 <code>someJavaFunction[.overload(...)].implementation = function(...) &#123;...&#125;</code> 函数块中的参数类型和this类型</li>
+</ol>
+<p>ps. 对于未能追踪到的类型, 可以使用 Java.cast 来为其做一个声明</p>
+<h1 id="0x01-简单介绍"><a href="#0x01-简单介绍" class="headerlink" title="0x01 简单介绍"></a>0x01 简单介绍</h1><h2 id="获取设备"><a href="#获取设备" class="headerlink" title="获取设备"></a>获取设备</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"><span class="comment"># 无线连接</span></span><br><span class="line"><span class="comment"># /data/local/tmp/frida-server -l 0.0.0.0:6666</span></span><br><span class="line"><span class="comment"># Wifi ADB监听IP和端口为192.168.2.111:5555</span></span><br><span class="line">device = frida.get_device_manager().add_remote_device(<span class="string">&quot;192.168.2.111:6666&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 有线连接</span></span><br><span class="line">device = frida.get_usb_device()</span><br></pre></td></tr></table></figure>
+
+<h2 id="注入进程"><a href="#注入进程" class="headerlink" title="注入进程"></a>注入进程</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># spawn方式注入进程</span></span><br><span class="line">pid = device.spawn([<span class="string">&#x27;com.example.luodemo&#x27;</span>])</span><br><span class="line">device.resume(pid)</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line">session = device.attach(pid)</span><br><span class="line"></span><br><span class="line"><span class="comment"># attach模式注入进程</span></span><br><span class="line">session = device.attach(<span class="string">&#x27;com.example.luodemo&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="注入脚本"><a href="#注入脚本" class="headerlink" title="注入脚本"></a>注入脚本</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line">script = session.create_script(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">setImmediate(Java.perform(function()&#123;</span></span><br><span class="line"><span class="string">    console.log(&#x27;hello python frida&#x27;)</span></span><br><span class="line"><span class="string">&#125;))</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>) <span class="comment">#读入Hook脚本内容</span></span><br><span class="line"></span><br><span class="line">script.load() <span class="comment">#将脚本加载进进程空间中</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件方式注入进程"><a href="#文件方式注入进程" class="headerlink" title="文件方式注入进程"></a>文件方式注入进程</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;LuoHook.js&quot;</span>, encoding=<span class="string">&quot;UTF-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    script = session.create_script(f.read())</span><br><span class="line">script.load()</span><br></pre></td></tr></table></figure>
+
+<h2 id="调用函数"><a href="#调用函数" class="headerlink" title="调用函数"></a>调用函数</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line">session = frida.get_usb_device().attach(<span class="string">&#x27;目标应用包名&#x27;</span>)</span><br><span class="line">script = session.create_script(<span class="built_in">open</span>(<span class="string">&#x27;myscript.js&#x27;</span>).read())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">on_message</span>(<span class="params">message, data</span>):</span><br><span class="line">    <span class="built_in">print</span>(message)</span><br><span class="line"></span><br><span class="line">script.on(<span class="string">&#x27;message&#x27;</span>, on_message)</span><br><span class="line">script.load()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 现在可以通过 RPC 调用函数</span></span><br><span class="line">result = script.exports.myFunction(arg1, arg2)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><h3 id="script-on"><a href="#script-on" class="headerlink" title="script.on"></a>script.on</h3><p>在 Frida 的脚本中使用 <code>script.on</code> 方法是为了设置一个事件监听器，它允许你捕获并处理脚本中发出的消息。这通常用于以下两种情况：</p>
+<ol>
+<li><strong>接收脚本中的输出</strong>：脚本可以通过 <code>send</code> 方法发送消息到附加的进程（例如，打印调试信息或者返回结果）。</li>
+<li><strong>处理脚本中的异常</strong>：如果脚本中发生错误，Frida 会自动发送一个包含错误信息的消息。</li>
+</ol>
+<p>以下是 <code>script.on</code> 方法的基本用法：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">script.on(<span class="string">&#x27;message&#x27;</span>, function(message, data) &#123;</span><br><span class="line">    // message 参数包含消息的类型和内容</span><br><span class="line">    // data 参数包含与消息相关的原始数据（如果有的话）</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (message.<span class="built_in">type</span> === <span class="string">&#x27;send&#x27;</span>) &#123;</span><br><span class="line">        // 处理脚本通过 send 方法发送的消息</span><br><span class="line">        console.log(<span class="string">&quot;Received message from script:&quot;</span>, message.payload);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (message.<span class="built_in">type</span> === <span class="string">&#x27;error&#x27;</span>) &#123;</span><br><span class="line">        // 处理脚本中的错误</span><br><span class="line">        console.log(<span class="string">&quot;Script reported an error:&quot;</span>, message.description);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>message</code> 对象通常具有以下属性：</p>
+<ul>
+<li><code>type</code>：消息类型，可以是 <code>&#39;send&#39;</code>、<code>&#39;error&#39;</code> 或 <code>&#39;console&#39;</code>。</li>
+<li><code>payload</code>：当消息类型是 <code>&#39;send&#39;</code> 时，这是脚本发送的实际数据。</li>
+<li><code>description</code>：当消息类型是 <code>&#39;error&#39;</code> 时，这是错误描述。</li>
+</ul>
+<p><code>data</code> 参数通常是一个包含原始数据（例如，缓冲区）的对象，它仅在消息类型是 <code>&#39;send&#39;</code> 时有意义。</p>
+<p>使用 <code>script.on</code> 方法，你可以确保在脚本运行时能够接收和处理任何重要的通知或数据，从而实现与脚本的交互。这在调试和与脚本进行通信时非常有用。</p>
+<h3 id="rpc-exports"><a href="#rpc-exports" class="headerlink" title="rpc.exports"></a>rpc.exports</h3><p><code>rpc.exports</code> 是在 Frida 脚本中使用的一个属性，它用于定义可以从外部通过 RPC（远程过程调用）调用的函数。通过这种方式，你可以将 Frida 脚本中的某些功能暴露给外部程序，使得外部程序可以远程执行这些功能。</p>
+<p>以下是如何使用 <code>rpc.exports</code> 的基本步骤：</p>
+<p><strong>第一种方式</strong>，函数直接嵌套在RPC导出中，直接导出。</p>
+<p>test.js代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">rpc.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">hello</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Hello&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">failPlease</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;oops&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>python代码：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line">device = frida.get_usb_device()</span><br><span class="line">session = device.attach(<span class="string">&quot;设置&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;test.js&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    script = session.create_script(f.read())</span><br><span class="line">script.load()</span><br><span class="line"></span><br><span class="line">api = script.exports</span><br><span class="line"><span class="built_in">print</span>(api.hello())</span><br><span class="line"><span class="built_in">print</span>(api.fail_please())</span><br></pre></td></tr></table></figure>
+
+<p><strong>第二种方式</strong>，先写函数在 RPC ，然后导出。</p>
+<p>test.js 代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hello</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">failPlease</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;oops&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rpc.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">hi</span>: hello,</span><br><span class="line">    <span class="attr">fail</span>: failPlease</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>python代码：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line">device = frida.get_usb_device()</span><br><span class="line">session = device.attach(<span class="string">&quot;设置&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;test.js&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    script = session.create_script(f.read())</span><br><span class="line">script.load()</span><br><span class="line"></span><br><span class="line">api = script.exports</span><br><span class="line"><span class="built_in">print</span>(api.hi())</span><br><span class="line"><span class="built_in">print</span>(api.fail())</span><br></pre></td></tr></table></figure>
+
+<h1 id="0x02-ARIDA-管理PRC脚本-自动生成-http-接口的工具"><a href="#0x02-ARIDA-管理PRC脚本-自动生成-http-接口的工具" class="headerlink" title="0x02 ARIDA-管理PRC脚本&amp;自动生成 http 接口的工具"></a>0x02 ARIDA-管理PRC脚本&amp;自动生成 http 接口的工具</h1><p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/tcc0lin/arida">GitHub - tcc0lin&#x2F;arida: 基于FastAPI实现的Frida-RPC工具，自动解析JavaScript文件生成对应API接口</a></p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p><code>Python</code>执行<code>PyexecJs</code>通过<code>Js的AST树</code>结构获取<code>Frida-Js</code>脚本中<code>rpc.exports</code>的方法以及对应方法的参数个数，根据方法名和参数个数通过<code>types.FunctionDef</code>从<code>Python AST字节码</code>来动态生成新的<code>Function对象</code>，并且结合<code>pydantic</code>的<code>create_model</code>自动生成的参数模型注册到<code>FastAPI的路由系统</code>中，实现<code>Frida-RPC</code>的功能。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410091433276.png" alt="image.png"> </p>
+<h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><ol>
+<li>管理<code>JavaScript</code>文件，具备<code>APP-文件</code>的映射关系</li>
+<li>自动针对现有的<code>JavaScript</code>方法生成相应的<code>API</code>方法</li>
+<li>自动生成<code>Open API</code>文档</li>
+</ol>
+<h2 id="安装-使用"><a href="#安装-使用" class="headerlink" title="安装&amp;使用"></a>安装&amp;使用</h2><p>参考上面官方地址</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410091434355.png" alt="img"> </p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410091434379.png" alt="img"> </p>
+<h1 id="0x03-send-recv-wait"><a href="#0x03-send-recv-wait" class="headerlink" title="0x03 send&#x2F;recv&#x2F;wait"></a>0x03 send&#x2F;recv&#x2F;wait</h1><p><a target="_blank" rel="noopener" href="https://www.linqi.net.cn/index.php/archives/293/#cl-6">FRIDA RPC - 奋斗的安卓勇士Blog (linqi.net.cn)</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h3 id="1、send"><a href="#1、send" class="headerlink" title="1、send"></a><strong>1、send</strong></h3><ul>
+<li><code>send()</code> 函数用于从Frida脚本向主机控制台发送消息。</li>
+<li>这个函数可以用来传递任何可以被序列化的数据，包括基本数据类型、对象和数组。</li>
+<li>使用示例：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">send(&#x27;Hello from Frida script!&#x27;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、recv"><a href="#2、recv" class="headerlink" title="2、recv():"></a><strong>2、recv()</strong>:</h3><ul>
+<li><code>recv()</code> 函数用于在脚本中设置一个回调函数，该函数将在主机控制台发送消息时被调用。</li>
+<li>你可以使用这个函数来处理从主机控制台接收到的命令或数据。</li>
+<li>使用示例：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">recv(function onData(data) &#123;</span><br><span class="line">    console.log(&#x27;Received data:&#x27;, data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、wait"><a href="#3、wait" class="headerlink" title="3、wait():"></a><strong>3、wait()</strong>:</h3><ul>
+<li><code>wait()</code> 函数用于暂停脚本的执行，直到主机控制台调用<code>resume()</code>。</li>
+<li>这可以用于同步操作，尤其是在你需要等待某个外部事件或条件时。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wait();</span><br><span class="line">// 脚本将在这里暂停，直到主机控制台调用resume()</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>要实现的功能是，我们不仅仅可以在<code>kali</code>主机上调用安卓<code>app</code>里的函数。我们还可以把数据从安卓<code>app</code>里传递到<code>kali</code>主机上，在主机上进行修改，再传递回安卓<code>app</code>里面去。</p>
+<p>编写这样一个<code>app</code>，其中最核心的地方在于判断用户是否为<code>admin</code>，如果是，则直接返回错误，禁止登陆。如果不是，则把用户和密码上传到服务器上进行验证。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.roysue.demo04;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Base64;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.EditText;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line"></span><br><span class="line">    EditText username_et;</span><br><span class="line">    EditText password_et;</span><br><span class="line">    TextView message_tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onCreate</span><span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        password_et = (EditText) <span class="built_in">this</span>.findViewById(R.id.editText2);</span><br><span class="line">        username_et = (EditText) <span class="built_in">this</span>.findViewById(R.id.editText);</span><br><span class="line">        message_tv = ((TextView) findViewById(R.id.textView));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">this</span>.findViewById(R.id.button).setOnClickListener(<span class="keyword">new</span> <span class="title class_">View</span>.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClick</span><span class="params">(View v)</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (username_et.getText().toString().compareTo(<span class="string">&quot;admin&quot;</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">                    message_tv.setText(<span class="string">&quot;You cannot login as admin&quot;</span>);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//hook target</span></span><br><span class="line">                message_tv.setText(<span class="string">&quot;Sending to the server :&quot;</span> + Base64.encodeToString((username_et.getText().toString() + <span class="string">&quot;:&quot;</span> + password_et.getText().toString()).getBytes(), Base64.DEFAULT));</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终程序运行之后，效果如下：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202410/202410091527025.jpeg" alt="img"> </p>
+<p>我们的目标就是在<code>kali</code>主机上“得到”输入框输入的内容，并且修改其输入的内容，并且“传输”给安卓机器，使其通过验证。也就是说，我们哪怕输入<code>admin</code>的账户和密码，也可以绕过本地校验，进行登陆的操作。</p>
+<p>所以最终安卓端的<code>js</code>代码的逻辑就是，截取输入，传输给<code>kali</code>主机，暂停执行，得到<code>kali</code>主机传回的数据之后，继续执行。形成代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> tv_class = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;android.widget.TextView&quot;</span>);</span><br><span class="line">  tv_class.<span class="property">setText</span>.<span class="title function_">overload</span>(<span class="string">&quot;java.lang.CharSequence&quot;</span>).<span class="property">implementation</span> = <span class="keyword">function</span> (<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> string_to_send = x.<span class="title function_">toString</span>();</span><br><span class="line">    <span class="keyword">var</span> string_to_recv;</span><br><span class="line">    <span class="title function_">send</span>(string_to_send); <span class="comment">// 将数据发送给kali主机的python代码</span></span><br><span class="line">    <span class="title function_">recv</span>(<span class="keyword">function</span> (<span class="params">received_json_object</span>) &#123;</span><br><span class="line">      string_to_recv = received_json_object.<span class="property">my_data</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;string_to_recv: &quot;</span> + string_to_recv);</span><br><span class="line">    &#125;).<span class="title function_">wait</span>(); <span class="comment">//收到数据之后，再执行下去</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="title function_">setText</span>(string_to_recv);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>kali</code>主机端的流程就是，将接受到的<code>JSON</code>数据解析，提取出其中的密码部分，然后将用户名替换成<code>admin</code>，这样就实现了将<code>admin</code>和<code>pw</code>发送给“服务器”的结果。</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_message_handler</span>(<span class="params">message, payload</span>):</span><br><span class="line">    <span class="built_in">print</span> message</span><br><span class="line">    <span class="built_in">print</span> payload</span><br><span class="line">    <span class="keyword">if</span> message[<span class="string">&quot;type&quot;</span>] == <span class="string">&quot;send&quot;</span>:</span><br><span class="line">        <span class="built_in">print</span> message[<span class="string">&quot;payload&quot;</span>]</span><br><span class="line">        data = message[<span class="string">&quot;payload&quot;</span>].split(<span class="string">&quot;:&quot;</span>)[<span class="number">1</span>].strip()</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;message:&#x27;</span>, message</span><br><span class="line">        data = data.decode(<span class="string">&quot;base64&quot;</span>)</span><br><span class="line">        user, pw = data.split(<span class="string">&quot;:&quot;</span>)</span><br><span class="line">        data = (<span class="string">&quot;admin&quot;</span> + <span class="string">&quot;:&quot;</span> + pw).encode(<span class="string">&quot;base64&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;encoded data:&quot;</span>, data</span><br><span class="line">        script.post(&#123;<span class="string">&quot;my_data&quot;</span>: data&#125;)  <span class="comment"># 将JSON对象发送回去</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Modified data sent&quot;</span></span><br><span class="line"></span><br><span class="line">device = frida.get_usb_device()</span><br><span class="line">pid = device.spawn([<span class="string">&quot;com.roysue.demo04&quot;</span>])</span><br><span class="line">device.resume(pid)</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line">session = device.attach(pid)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;s4.js&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    script = session.create_script(f.read())</span><br><span class="line">script.on(<span class="string">&quot;message&quot;</span>, my_message_handler)  <span class="comment"># 注册消息处理函数</span></span><br><span class="line">script.load()</span><br><span class="line">raw_input()</span><br></pre></td></tr></table></figure>
+
+<p>我们只要输入任意用户名(非admin)+密码，非admin的用户名可以绕过<code>compareTo</code>校验，然后<code>frida</code>会帮助我们将用户名改成<code>admin</code>，最终就是<code>admin:pw</code>的组合发送到服务器。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ python loader4.py</span><br><span class="line"></span><br><span class="line">Script loaded successfully</span><br><span class="line">&#123;u&#x27;type&#x27;: u&#x27;send&#x27;, u&#x27;payload&#x27;: u&#x27;Sending to the server :YWFhYTpiYmJi\n&#x27;&#125;</span><br><span class="line">None</span><br><span class="line">Sending to the server :YWFhYTpiYmJi</span><br><span class="line"></span><br><span class="line">message: &#123;u&#x27;type&#x27;: u&#x27;send&#x27;, u&#x27;payload&#x27;: u&#x27;Sending to the server :YWFhYTpiYmJi\n&#x27;&#125;</span><br><span class="line">data: aaaa:bbbb</span><br><span class="line">pw: bbbb</span><br><span class="line">encoded data: YWRtaW46YmJiYg==</span><br><span class="line"></span><br><span class="line">Modified data sent</span><br><span class="line">string_to_recv: YWRtaW46YmJiYg==</span><br></pre></td></tr></table></figure>
+
+<p>动态修改输入内容就这样实现了。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Muhe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-%E9%85%8D%E7%BD%AERPC%E5%92%8C%E5%BC%80%E5%8F%91%E5%A7%BF%E5%8A%BF/">http://example.com/2024/10/08/主动调用-配置RPC和开发姿势/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Muhe's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Frida/">Frida</a><a class="post-meta__tags" href="/tags/Rpc/">Rpc</a><a class="post-meta__tags" href="/tags/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8/">主动调用</a></div><div class="post_share"><div class="social-share" data-image="/img/medias/article_cover/12.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-Java%E5%B1%82%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%B9%B6%E6%9A%B4%E6%BC%8F%E8%87%B3%E5%85%AC%E7%BD%91/" title="主动调用-Java层主动调用并暴漏至公网"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/0.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">主动调用-Java层主动调用并暴漏至公网</div></div></a></div><div class="next-post pull-right"><a href="/2024/10/08/%E5%85%AD%E4%B8%AA%E5%B8%B8%E8%A7%81%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E5%BC%8F/" title="六个常见的脱壳方式"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/3.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">六个常见的脱壳方式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/10/08/app%E4%B8%89%E7%A7%8D%E5%B8%B8%E8%A7%81%E6%8A%93%E5%8C%85%E5%9C%BA%E6%99%AF%E5%8F%8A%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/" title="app三种常见抓包场景及案例分析"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-08</div><div class="title">app三种常见抓包场景及案例分析</div></div></a></div><div><a href="/2024/07/10/objection%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" title="objection工具使用"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/23.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-10</div><div class="title">objection工具使用</div></div></a></div><div><a href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-Java%E5%B1%82%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%B9%B6%E6%9A%B4%E6%BC%8F%E8%87%B3%E5%85%AC%E7%BD%91/" title="主动调用-Java层主动调用并暴漏至公网"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-08</div><div class="title">主动调用-Java层主动调用并暴漏至公网</div></div></a></div><div><a href="/2024/10/10/%E6%9F%90%E4%BF%9D%E9%99%A9APP%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E9%80%86%E5%90%91/" title="某保险APP加解密算法逆向"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-10</div><div class="title">某保险APP加解密算法逆向</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="this.onerror=null;this.src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Muhe</div><div class="author-info__description">凡心所向，素履所往，生如逆旅，一苇以航</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">89</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">亲爱的读者们，您好！感谢您选择浏览我的博客，这里是我分享知识、见解和心得的小天地。祝您阅读愉快！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">0x00 开发环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="toc-number">1.1.</span> <span class="toc-text">方法一</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS%E5%8D%95%E6%AD%A5%E8%B0%83%E8%AF%95"><span class="toc-number">1.1.1.</span> <span class="toc-text">JS单步调试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#chrome"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">chrome</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pycharm"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">pycharm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">方法二</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80Frida%E4%BB%A3%E7%A0%81%E5%AE%8C%E6%88%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">基础Frida代码完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6-frida-tsplugin"><span class="toc-number">1.2.2.</span> <span class="toc-text">下载并安装插件 frida-tsplugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Frida-tsplugin-%E7%89%B9%E6%80%A7"><span class="toc-number">1.2.3.</span> <span class="toc-text">Frida-tsplugin 特性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.</span> <span class="toc-text">0x01 简单介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">获取设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">注入进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E8%84%9A%E6%9C%AC"><span class="toc-number">2.3.</span> <span class="toc-text">注入脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F%E6%B3%A8%E5%85%A5%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.4.</span> <span class="toc-text">文件方式注入进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">2.5.</span> <span class="toc-text">调用函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%87%E6%B3%A8"><span class="toc-number">2.6.</span> <span class="toc-text">备注</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#script-on"><span class="toc-number">2.6.1.</span> <span class="toc-text">script.on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rpc-exports"><span class="toc-number">2.6.2.</span> <span class="toc-text">rpc.exports</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-ARIDA-%E7%AE%A1%E7%90%86PRC%E8%84%9A%E6%9C%AC-%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90-http-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">0x02 ARIDA-管理PRC脚本&amp;自动生成 http 接口的工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">3.2.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="toc-number">3.3.</span> <span class="toc-text">核心功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.</span> <span class="toc-text">安装&amp;使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="toc-number">3.5.</span> <span class="toc-text">效果展示</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-send-recv-wait"><span class="toc-number">4.</span> <span class="toc-text">0x03 send&#x2F;recv&#x2F;wait</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">4.1.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81send"><span class="toc-number">4.1.1.</span> <span class="toc-text">1、send</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81recv"><span class="toc-number">4.1.2.</span> <span class="toc-text">2、recv():</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81wait"><span class="toc-number">4.1.3.</span> <span class="toc-text">3、wait():</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text">案例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/10/%E6%9F%90%E4%BF%9D%E9%99%A9APP%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E9%80%86%E5%90%91/" title="某保险APP加解密算法逆向"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/1.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="某保险APP加解密算法逆向"/></a><div class="content"><a class="title" href="/2024/10/10/%E6%9F%90%E4%BF%9D%E9%99%A9APP%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95%E9%80%86%E5%90%91/" title="某保险APP加解密算法逆向">某保险APP加解密算法逆向</a><time datetime="2024-10-10T09:44:40.000Z" title="发表于 2024-10-10 17:44:40">2024-10-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/09/frida-rpc%E7%AE%97%E6%B3%95%E8%BD%AC%E5%8F%91%E5%AE%9E%E6%88%98/" title="frida_rpc算法转发实战"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/8.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="frida_rpc算法转发实战"/></a><div class="content"><a class="title" href="/2024/10/09/frida-rpc%E7%AE%97%E6%B3%95%E8%BD%AC%E5%8F%91%E5%AE%9E%E6%88%98/" title="frida_rpc算法转发实战">frida_rpc算法转发实战</a><time datetime="2024-10-09T09:23:21.000Z" title="发表于 2024-10-09 17:23:21">2024-10-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-Java%E5%B1%82%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%B9%B6%E6%9A%B4%E6%BC%8F%E8%87%B3%E5%85%AC%E7%BD%91/" title="主动调用-Java层主动调用并暴漏至公网"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/0.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="主动调用-Java层主动调用并暴漏至公网"/></a><div class="content"><a class="title" href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-Java%E5%B1%82%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%E5%B9%B6%E6%9A%B4%E6%BC%8F%E8%87%B3%E5%85%AC%E7%BD%91/" title="主动调用-Java层主动调用并暴漏至公网">主动调用-Java层主动调用并暴漏至公网</a><time datetime="2024-10-08T01:33:33.000Z" title="发表于 2024-10-08 09:33:33">2024-10-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-%E9%85%8D%E7%BD%AERPC%E5%92%8C%E5%BC%80%E5%8F%91%E5%A7%BF%E5%8A%BF/" title="配置RPC和开发姿势"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/12.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="配置RPC和开发姿势"/></a><div class="content"><a class="title" href="/2024/10/08/%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8-%E9%85%8D%E7%BD%AERPC%E5%92%8C%E5%BC%80%E5%8F%91%E5%A7%BF%E5%8A%BF/" title="配置RPC和开发姿势">配置RPC和开发姿势</a><time datetime="2024-10-08T01:32:39.000Z" title="发表于 2024-10-08 09:32:39">2024-10-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/08/%E5%85%AD%E4%B8%AA%E5%B8%B8%E8%A7%81%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E5%BC%8F/" title="六个常见的脱壳方式"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/3.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="六个常见的脱壳方式"/></a><div class="content"><a class="title" href="/2024/10/08/%E5%85%AD%E4%B8%AA%E5%B8%B8%E8%A7%81%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E5%BC%8F/" title="六个常见的脱壳方式">六个常见的脱壳方式</a><time datetime="2024-10-08T01:31:46.000Z" title="发表于 2024-10-08 09:31:46">2024-10-08</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/medias/article_cover/12.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Muhe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="2520739691" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrcType="-1"> </div><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/sakura.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"width":200,"height":400,"position":"right","hOffset":0,"vOffset":-130},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: true,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
