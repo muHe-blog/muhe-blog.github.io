@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Gophish钓鱼网页制作 | Muhe's Blog</title><meta name="author" content="Muhe"><meta name="copyright" content="Muhe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="referrer" content="no-referrer"><meta name="description" content="GSingleFile 介绍GSingleFile是一款浏览器插件，支持谷歌浏览器和火狐浏览器。不同于别的克隆站点工具会生成多个文件，该插件可以将站点完整的页面保存到一个 HTML 文件中，非常适配 Gophish 平台做钓鱼网页。  Firefox 浏览器插件地址:https:&#x2F;&#x2F;addons.mozilla.org&#x2F;zh-CN&#x2F;firefox&#x2F;addon&#x2F;single-file&#x2F;?utm_so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gophish钓鱼网页制作">
+<meta property="og:url" content="http://example.com/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5%E5%88%B6%E4%BD%9C/index.html">
+<meta property="og:site_name" content="Muhe&#39;s Blog">
+<meta property="og:description" content="GSingleFile 介绍GSingleFile是一款浏览器插件，支持谷歌浏览器和火狐浏览器。不同于别的克隆站点工具会生成多个文件，该插件可以将站点完整的页面保存到一个 HTML 文件中，非常适配 Gophish 平台做钓鱼网页。  Firefox 浏览器插件地址:https:&#x2F;&#x2F;addons.mozilla.org&#x2F;zh-CN&#x2F;firefox&#x2F;addon&#x2F;single-file&#x2F;?utm_so">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/medias/article_cover/12.jpg">
+<meta property="article:published_time" content="2025-06-25T05:18:23.000Z">
+<meta property="article:modified_time" content="2025-06-27T05:47:18.786Z">
+<meta property="article:author" content="Muhe">
+<meta property="article:tag" content="gophish">
+<meta property="article:tag" content="GSingleFile">
+<meta property="article:tag" content="网页钓鱼">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/medias/article_cover/12.jpg"><link rel="shortcut icon" href="/img/medias/favicon.png"><link rel="canonical" href="http://example.com/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5%E5%88%B6%E4%BD%9C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Gophish钓鱼网页制作',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-06-27 13:47:18'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><script src="/js/bandev.js"></script><link rel="stylesheet" href="/css/icon.css"><link rel="stylesheet" href="/css/mouse.css"><script src="/js/leaves.js"></script><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="onerror=null;src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/medias/article_cover/12.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Muhe's Blog"><span class="site-name">Muhe's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Gophish钓鱼网页制作</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-25T05:18:23.000Z" title="发表于 2025-06-25 13:18:23">2025-06-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-06-27T05:47:18.786Z" title="更新于 2025-06-27 13:47:18">2025-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%92%93%E9%B1%BC%E6%BC%94%E7%BB%83/">钓鱼演练</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Gophish钓鱼网页制作"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="GSingleFile-介绍"><a href="#GSingleFile-介绍" class="headerlink" title="GSingleFile 介绍"></a>GSingleFile 介绍</h1><p>GSingleFile是一款浏览器插件，支持谷歌浏览器和火狐浏览器。不同于别的克隆站点工具会生成多个文件，该插件可以将站点完整的页面保存到一个 HTML 文件中，非常适配 Gophish 平台做钓鱼网页。</p>
+<ul>
+<li>Firefox 浏览器插件地址:<br><a target="_blank" rel="noopener" href="https://addons.mozilla.org/zh-CN/firefox/addon/single-file/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search">https://addons.mozilla.org/zh-CN/firefox/addon/single-file/?utm_source=addons.mozilla.org&amp;utm_medium=referral&amp;utm_content=search</a></li>
+<li>Chrome 浏览器插件地址: <a target="_blank" rel="noopener" href="https://chromewebstore.google.com/detail/singlefile/mpiodijhokgodhhofbcjdecpffjipkle?hl=zh-CN&utm_source=ext_sidebar">https://chromewebstore.google.com/detail/singlefile/mpiodijhokgodhhofbcjdecpffjipkle?hl=zh-CN&amp;utm_source=ext_sidebar</a></li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270936028.png" alt="img"> </p>
+<h1 id="GSingleFile-使用"><a href="#GSingleFile-使用" class="headerlink" title="GSingleFile 使用"></a>GSingleFile 使用</h1><p>以腾讯企业邮箱系统登录页面为例，选择账号密码登录方式，点击安装好的 GSingleFile 插件，即可直接克隆下载页面到一个 html 文件中。</p>
+<ul>
+<li>腾讯企业邮箱地址：<a target="_blank" rel="noopener" href="https://exmail.qq.com/login">https://exmail.qq.com/login</a></li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270937140.png" alt="img"> </p>
+<p>打开克隆下载好的网页 html 文件，搜索 from 表单的 action 的值，将其替换为 <code>action=&quot;&quot;</code></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270937121.png" alt="img"> </p>
+<h1 id="Gophish-钓鱼网页"><a href="#Gophish-钓鱼网页" class="headerlink" title="Gophish 钓鱼网页"></a>Gophish 钓鱼网页</h1><p>这里直接演示钓鱼页面使用，Gophish 钓鱼平台的基础使用不再赘述，可以参考之前写的文章：<a target="_blank" rel="noopener" href="http://www.luckysec.cn/posts/63a62cd6.html">http://www.luckysec.cn/posts/63a62cd6.html</a></p>
+<p>登录 Gophish 平台，点击 Landing Pages 功能，新建钓鱼页面内容如下：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270937915.png" alt="img"> </p>
+<p>点击编辑器 Source 预览克隆到钓鱼页面效果。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270939298.png" alt="img"> </p>
+<p>点击 Email Tamples 功能，新建邮件模板，编辑内容如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>您的企业邮箱账号密码即将过期，请及时登录<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123;.URL&#125;&#125;&quot;</span> <span class="attr">target</span>=<span class="string">&quot;_blank&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&quot;</span>&gt;</span>企业邮箱平台<span class="tag">&lt;/<span class="name">a</span>&gt;</span>修改密码<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270940840.png" alt="img"> </p>
+<p>点击 Campaigns 功能，选择提前构造好的邮件文案、钓鱼页面、钓鱼地址、攻击者邮件、受害者邮箱，发送邮件即可。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270940376.png" alt="img"> </p>
+<p>钓鱼邮件发送成功后，受害者邮箱接收邮件如下。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270940251.png" alt="img"> </p>
+<p>点击邮件中的链接，即可跳转克隆好的企业邮箱钓鱼页面。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270940788.png" alt="img"> </p>
+<h1 id="Gophish-钓鱼效果"><a href="#Gophish-钓鱼效果" class="headerlink" title="Gophish 钓鱼效果"></a>Gophish 钓鱼效果</h1><p>在 Gophish 钓鱼平台上，可以捕获到受害者中招的整个过程时间线。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270941265.png" alt="img"> </p>
+<p>Gophish 钓鱼平台详细记录了受害者访问钓鱼页面提交的数据。</p>
+<p> <img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="https://gitee.com/jingweihang/img/raw/master/hexo/202506/202506270941270.png" alt="img"></p>
+<h1 id="【附】注意事项"><a href="#【附】注意事项" class="headerlink" title="【附】注意事项"></a>【附】注意事项</h1><p>当导入真实网站来作为钓鱼页面时，绝大多数情况下并非仅通过Import就能够达到理想下的克隆，通过多次实践，总结出以下几点注意事项</p>
+<ul>
+<li>捕获不到提交的数据<ul>
+<li>导入后要在HTML编辑框的非Source模式下观察源码解析情况，如果明显发现存在许多地方未加载，则有可能导入的源码并非页面完全加载后的前端代码，而是一个半成品，需要通过浏览器二次解析，渲染未加载的DOM。这种情况下，除非能够直接爬取页面完全加载后的前端代码，否则无法利用gophish进行钓鱼，造成的原因是不满足第2点。</li>
+<li>导入的前端源码，必须存在严格存在&lt;form method&#x3D;”post” ···&gt;&lt;input name&#x3D;”aaa” ··· &#x2F;&gt; ··· &lt;input type&#x3D;”submit” ··· &#x2F;&gt;</form>结构，即表单（POST方式）— Input标签（具有name属性）Input标签（submit类型）— 表单闭合的结构，如果不满足则无法捕获到提交的数据</li>
+<li>在满足第2点的结构的情况下，还需要求&lt;form method&#x3D;”post” ···&gt;在浏览器解析渲染后（即预览情况下）不能包含action属性，或者action属性的值为空。否则将会把表单数据提交给action指定的页面，而导致无法被捕获到</li>
+</ul>
+</li>
+<li>捕获数据不齐全<ul>
+<li>对于需要被捕获的表单数据，除了input标签需要被包含在<form>中，还需满足该<input>存在name属性。例如<input name="username">,否则会因为没有字段名而导致value被忽略</li>
+</ul>
+</li>
+<li>相关字段被加密<ul>
+<li>针对https页面的import，通常一些字段如密码会进行加密处理，这时需要通过审计导入的前端代码，找到加密的JavaScript函数（多数情况存在于单独的js文件中，通过src引入），将其在gophish的HTML编辑框中删除，阻止表单数据被加密</li>
+</ul>
+</li>
+</ul>
+<p>以上几点是在实践中总结出来的宝贵经验，或许还有其他许多坑未填，但所有的坑通常都围绕在<form><input /></form>结构中，所以如果遇到新坑，先将该结构排查一遍，还是不行，再另辟蹊径。。。</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/3xO3yDdeqmwEmkP0V4TcEg">https://mp.weixin.qq.com/s/3xO3yDdeqmwEmkP0V4TcEg</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.luckysec.cn/posts/a1d5e543.html">http://www.luckysec.cn/posts/a1d5e543.html</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Muhe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5%E5%88%B6%E4%BD%9C/">http://example.com/2025/06/25/Gophish钓鱼网页制作/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Muhe's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/gophish/">gophish</a><a class="post-meta__tags" href="/tags/GSingleFile/">GSingleFile</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E9%A1%B5%E9%92%93%E9%B1%BC/">网页钓鱼</a></div><div class="post_share"><div class="social-share" data-image="/img/medias/article_cover/12.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼二维码制作"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/20.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Gophish钓鱼二维码制作</div></div></a></div><div class="next-post pull-right"><a href="/2025/06/25/Gophish%E9%82%AE%E4%BB%B6%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Gophish钓鱼平台搭建及使用"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/24.jpg" onerror="onerror=null;src='/img/medias/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Gophish钓鱼平台搭建及使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼二维码制作"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/20.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-25</div><div class="title">Gophish钓鱼二维码制作</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/avatar.jpg" onerror="this.onerror=null;this.src='/img/medias/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Muhe</div><div class="author-info__description">凡心所向，素履所往，生如逆旅，一苇以航</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">111</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">亲爱的读者们，您好！感谢您选择浏览我的博客，这里是我分享知识、见解和心得的小天地。祝您阅读愉快！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#GSingleFile-%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">GSingleFile 介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GSingleFile-%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">GSingleFile 使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gophish-%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5"><span class="toc-number">3.</span> <span class="toc-text">Gophish 钓鱼网页</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Gophish-%E9%92%93%E9%B1%BC%E6%95%88%E6%9E%9C"><span class="toc-number">4.</span> <span class="toc-text">Gophish 钓鱼效果</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E3%80%90%E9%99%84%E3%80%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">【附】注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼二维码制作"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/20.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="Gophish钓鱼二维码制作"/></a><div class="content"><a class="title" href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼二维码制作">Gophish钓鱼二维码制作</a><time datetime="2025-06-25T05:18:36.000Z" title="发表于 2025-06-25 13:18:36">2025-06-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼网页制作"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/12.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="Gophish钓鱼网页制作"/></a><div class="content"><a class="title" href="/2025/06/25/Gophish%E9%92%93%E9%B1%BC%E7%BD%91%E9%A1%B5%E5%88%B6%E4%BD%9C/" title="Gophish钓鱼网页制作">Gophish钓鱼网页制作</a><time datetime="2025-06-25T05:18:23.000Z" title="发表于 2025-06-25 13:18:23">2025-06-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/06/25/Gophish%E9%82%AE%E4%BB%B6%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Gophish钓鱼平台搭建及使用"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/24.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="Gophish钓鱼平台搭建及使用"/></a><div class="content"><a class="title" href="/2025/06/25/Gophish%E9%82%AE%E4%BB%B6%E5%B9%B3%E5%8F%B0%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="Gophish钓鱼平台搭建及使用">Gophish钓鱼平台搭建及使用</a><time datetime="2025-06-25T05:17:38.000Z" title="发表于 2025-06-25 13:17:38">2025-06-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/06/25/%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="邮件服务器搭建及使用"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/9.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="邮件服务器搭建及使用"/></a><div class="content"><a class="title" href="/2025/06/25/%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="邮件服务器搭建及使用">邮件服务器搭建及使用</a><time datetime="2025-06-25T05:17:38.000Z" title="发表于 2025-06-25 13:17:38">2025-06-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/06/20/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%86%E5%90%91%E4%B9%8BJsRpc-Yakit-hijackSaveHTTPFlow%E7%83%AD%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0%E6%98%8E%E6%96%87%E6%B5%81%E9%87%8F%E6%98%BE%E7%A4%BA/" title="小程序逆向之JsRpc+Yakit_hijackSaveHTTPFlow热加载实现明文流量显示"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/medias/loading.gif" data-original="/img/medias/article_cover/17.jpg" onerror="this.onerror=null;this.src='/img/medias/404.jpg'" alt="小程序逆向之JsRpc+Yakit_hijackSaveHTTPFlow热加载实现明文流量显示"/></a><div class="content"><a class="title" href="/2025/06/20/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%80%86%E5%90%91%E4%B9%8BJsRpc-Yakit-hijackSaveHTTPFlow%E7%83%AD%E5%8A%A0%E8%BD%BD%E5%AE%9E%E7%8E%B0%E6%98%8E%E6%96%87%E6%B5%81%E9%87%8F%E6%98%BE%E7%A4%BA/" title="小程序逆向之JsRpc+Yakit_hijackSaveHTTPFlow热加载实现明文流量显示">小程序逆向之JsRpc+Yakit_hijackSaveHTTPFlow热加载实现明文流量显示</a><time datetime="2025-06-20T03:27:54.000Z" title="发表于 2025-06-20 11:27:54">2025-06-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/medias/article_cover/12.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By Muhe</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.8/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="2520739691" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrcType="-1"> </div><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/sakura.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"width":200,"height":400,"position":"right","hOffset":0,"vOffset":-130},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: true,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
